@@ -7,7 +7,10 @@ static constexpr int HEIGHT = 400;
 
 int main(int argc, char **argv)
 {
-  printf("Olá mundo do SDL!");
+  printf("Olá mundo do SDL!\n");
+
+  for (; *argv; argv++) printf("%s\n", *argv);
+
   SDL_Window *window = NULL;
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -33,10 +36,10 @@ int main(int argc, char **argv)
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
   SDL_Delay(5 * 1000);
 
+  // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
+  SDL_DestroyWindow(window);
   SDL_Quit();
 
-  // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
-  // SDL_DestroyWindow(window);
 
   return EXIT_SUCCESS;
 }
