@@ -33,6 +33,30 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+  if (!renderer)
+  {
+    fprintf(stderr, "O Renderer SDL não pode inicializar corretamente: %s\n", SDL_GetError());
+    return EXIT_FAILURE;
+  }
+
+  // Seta o fundo do renderer
+  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+  SDL_RenderClear(renderer);
+
+  SDL_Rect rect = {
+    .x = 25, .y = 25,
+    .w = 100, .h = 100
+  };
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+
+  SDL_RenderFillRect(renderer, &rect);
+
+  SDL_RenderPresent(renderer);
+
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
   SDL_Delay(5 * 1000);
 
