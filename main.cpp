@@ -61,10 +61,8 @@ int main(int argc, char **argv)
 
   SDL_RenderPresent(renderer);
 
-  trace("aqui");
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
   SDL_Delay(5 * 1000);
-  trace("aqui");
 
   // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
   SDL_DestroyWindow(window);
