@@ -1,11 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <SDL2/SDL.h>
 
 #include "./dev-utils.c"
 
 static constexpr int WIDTH = 600;
 static constexpr int HEIGHT = 400;
+
+typedef struct Context_Data {
+  int32_t x;
+  int32_t y;
+} Context_Data;
+
+static Context_Data context = { 0 };
+
+void render_scene(SDL_Renderer *renderer, Context_Data *context)
+{
+  // Seta o fundo do renderer
+  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+
+  SDL_RenderClear(renderer);
+
+  SDL_Rect rect = {
+    .x = context->x, .y = context->y,
+    .w = 50, .h = 50
+  };
+
+  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+
+  SDL_RenderFillRect(renderer, &rect);
+
+  SDL_RenderPresent(renderer);
+}
 
 int main(int argc, char **argv)
 {
@@ -45,24 +72,32 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  // Seta o fundo do renderer
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  SDL_Event event;
+  bool should_quit = false;
+  while (!should_quit)
+  {
+    //trace("Entrando no loop");
+    while (SDL_PollEvent(&event))
+    {
+      trace("Processando evento:");
+      printf("%d\n", event.type);
+      switch (event.type)
+      {
+        case SDL_QUIT: should_quit = true; break;
+        case SDL_KEYDOWN: trace("Keydown"); break;
+        case SDL_MOUSEMOTION: {
+          printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
+          context.x = event.motion.x;
+          context.y = event.motion.y;
+        } break;
+      }
 
-  SDL_RenderClear(renderer);
-
-  SDL_Rect rect = {
-    .x = 25, .y = 25,
-    .w = 100, .h = 100
-  };
-
-  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-
-  SDL_RenderFillRect(renderer, &rect);
-
-  SDL_RenderPresent(renderer);
+      render_scene(renderer, &context);
+    }
+  }
 
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
-  SDL_Delay(5 * 1000);
+  // SDL_Delay(5 * 1000);
 
   // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
   SDL_DestroyWindow(window);
