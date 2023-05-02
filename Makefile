@@ -1,7 +1,7 @@
 main: main.cpp
-	$(CC) main.cpp -o bin/main -Wall -Wextra -pedantic -lSDL2
+	$(CC) main.cpp -o target/main -Wall -Wextra -pedantic -std=c++2a -lSDL2
 run: main
-	@echo ./bin/main
+	@echo ./target/main
 	@echo "================"
-	@./bin/main
+	@./target/main
 	@echo "\n================\n"
