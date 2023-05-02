@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
+#include "./dev-utils.c"
+
 static constexpr int WIDTH = 600;
 static constexpr int HEIGHT = 400;
 
@@ -9,7 +11,9 @@ int main(int argc, char **argv)
 {
   printf("Olá mundo do SDL!\n");
 
-  for (; *argv; argv++) printf("%s\n", *argv);
+  printf("Argumentos providos:\n[ ");
+  for (int i = 0; i < argc; i++) printf("%s ", argv[i]);
+  printf(" ]\n");
 
   SDL_Window *window = NULL;
 
@@ -57,8 +61,10 @@ int main(int argc, char **argv)
 
   SDL_RenderPresent(renderer);
 
+  trace("aqui");
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
   SDL_Delay(5 * 1000);
+  trace("aqui");
 
   // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
   SDL_DestroyWindow(window);
