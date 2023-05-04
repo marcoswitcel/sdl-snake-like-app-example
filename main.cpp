@@ -77,6 +77,8 @@ int main(int argc, char **argv)
   while (!should_quit)
   {
     trace_timed("Entrando no loop");
+
+    // Processa inputs
     while (SDL_PollEvent(&event))
     {
       trace("Processando evento:");
@@ -92,8 +94,10 @@ int main(int argc, char **argv)
         } break;
       }
 
-      render_scene(renderer, &context);
     }
+    
+    // Renderiza
+    render_scene(renderer, &context);
   }
 
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
