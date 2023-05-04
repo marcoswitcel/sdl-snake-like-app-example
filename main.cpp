@@ -76,7 +76,7 @@ int main(int argc, char **argv)
   bool should_quit = false;
   while (!should_quit)
   {
-    //trace("Entrando no loop");
+    trace_timed("Entrando no loop");
     while (SDL_PollEvent(&event))
     {
       trace("Processando evento:");
