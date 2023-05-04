@@ -95,9 +95,13 @@ int main(int argc, char **argv)
       }
 
     }
-    
+
     // Renderiza
     render_scene(renderer, &context);
+
+    // @note Solução temporária para aliviar a CPU e manter a lógica rodando na velocidade certa
+    constexpr uint32_t TIMES_PER_SECOND = 12; 
+    SDL_Delay(1000 / TIMES_PER_SECOND);
   }
 
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
