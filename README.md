@@ -14,3 +14,4 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/23258650/sleep1-and-sdl-delay1-takes-15-ms](https://stackoverflow.com/questions/23258650/sleep1-and-sdl-delay1-takes-15-ms)
 * [https://thenumb.at/cpp-course/sdl2/08/08.html](https://thenumb.at/cpp-course/sdl2/08/08.html)
 * [https://gamedev.stackexchange.com/questions/129269/game-loop-getting-58-62-fps-why-not-exactly-60fps-sdl-c-osx](https://gamedev.stackexchange.com/questions/129269/game-loop-getting-58-62-fps-why-not-exactly-60fps-sdl-c-osx)
+* [https://en.cppreference.com/w/cpp/types/integer](https://en.cppreference.com/w/cpp/types/integer)
