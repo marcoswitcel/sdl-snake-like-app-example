@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 
 #include "./dev-utils.c"
+#include "./snake.c"
 
 static constexpr int WIDTH = 600;
 static constexpr int HEIGHT = 400;
@@ -11,6 +12,7 @@ static constexpr int HEIGHT = 400;
 typedef struct Context_Data {
   int32_t x;
   int32_t y;
+  Snake_Entity snake;
 } Context_Data;
 
 static Context_Data context = { 0 };
@@ -22,15 +24,27 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   SDL_RenderClear(renderer);
 
+  constexpr unsigned rect_size = 50;
   SDL_Rect rect = {
-    .x = context->x, .y = context->y,
-    .w = 50, .h = 50
+    .x = context->x - rect_size/2, .y = context->y - rect_size/2,
+    .w = rect_size, .h = rect_size
   };
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-
   SDL_RenderFillRect(renderer, &rect);
 
+  // Renderiza o quadrado da posição da cabeça da cobra
+  constexpr unsigned snake_rect_size = 10;
+  SDL_Rect snake_rect = {
+    .x = context->snake.head.x * snake_rect_size, .y = context->snake.head.y * snake_rect_size,
+    .w = snake_rect_size, .h = snake_rect_size
+  };
+
+  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+  SDL_RenderFillRect(renderer, &snake_rect);
+
+  // Faz o swap do backbuffer com o buffer da tela?
+  // @link https://wiki.libsdl.org/SDL2/SDL_RenderPresent
   SDL_RenderPresent(renderer);
 }
 
@@ -74,6 +88,13 @@ int main(int argc, char **argv)
 
   SDL_Event event;
   bool should_quit = false;
+
+  // Não consegui fazer a initialização em uma linha
+  context.snake.head.x = 3;
+  context.snake.head.x = 5;
+  context.snake.dir.x = true;
+  context.snake.dir.y = true;
+
   while (!should_quit)
   {
     trace_timed("Entrando no loop");
@@ -96,11 +117,15 @@ int main(int argc, char **argv)
 
     }
 
+    // Lógica de atualização
+    // @note temporário para testar a renderização
+    context.snake.head.x++;
+
     // Renderiza
     render_scene(renderer, &context);
 
     // @note Solução temporária para aliviar a CPU e manter a lógica rodando na velocidade certa
-    constexpr uint32_t TIMES_PER_SECOND = 12; 
+    constexpr uint32_t TIMES_PER_SECOND = 8; 
     SDL_Delay(1000 / TIMES_PER_SECOND);
   }
 
