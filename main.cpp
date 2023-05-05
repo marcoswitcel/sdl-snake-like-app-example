@@ -12,7 +12,10 @@ static constexpr int HEIGHT = 400;
 typedef struct Context_Data {
   int32_t x;
   int32_t y;
-  Snake_Entity snake;
+  Snake_Entity snake {
+    .head = { .x = 3, .y = 5, },
+    .dir = { .x = true, .y = true, },
+  };
 } Context_Data;
 
 static Context_Data context = { 0 };
@@ -88,13 +91,6 @@ int main(int argc, char **argv)
 
   SDL_Event event;
   bool should_quit = false;
-
-  // Não consegui fazer a initialização em uma linha
-  context.snake.head.x = 3;
-  context.snake.head.x = 5;
-  context.snake.dir.x = true;
-  context.snake.dir.y = true;
-
   while (!should_quit)
   {
     trace_timed("Entrando no loop");
