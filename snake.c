@@ -15,5 +15,5 @@ typedef struct Arena {
 typedef struct Snake_Entity
 {
     Vec2<unsigned> head;
-    Vec2<bool> dir;
+    Vec2<signed> dir;
 } Snake_Entity;

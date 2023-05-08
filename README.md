@@ -15,3 +15,6 @@ Trabalho em progresso
 * [https://thenumb.at/cpp-course/sdl2/08/08.html](https://thenumb.at/cpp-course/sdl2/08/08.html)
 * [https://gamedev.stackexchange.com/questions/129269/game-loop-getting-58-62-fps-why-not-exactly-60fps-sdl-c-osx](https://gamedev.stackexchange.com/questions/129269/game-loop-getting-58-62-fps-why-not-exactly-60fps-sdl-c-osx)
 * [https://en.cppreference.com/w/cpp/types/integer](https://en.cppreference.com/w/cpp/types/integer)
+* [https://wiki.libsdl.org/SDL2/SDL_KeyboardEvent](https://wiki.libsdl.org/SDL2/SDL_KeyboardEvent)
+* [https://wiki.libsdl.org/SDL2/SDL_Keysym](https://wiki.libsdl.org/SDL2/SDL_Keysym)
+* [https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html](https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html)

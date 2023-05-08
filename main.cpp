@@ -14,7 +14,7 @@ typedef struct Context_Data {
   int32_t y;
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
-    .dir = { .x = true, .y = true, },
+    .dir = { .x = 0, .y = 0, },
   };
   Arena arena {
     .width = 30,
@@ -27,17 +27,23 @@ static Context_Data context = { 0 };
 void update(Context_Data *context)
 {
   // Movimento e espaço restringido é garantido aqui
-  auto newX = context->snake.head.x + (context->snake.dir.x ? 1 : -1);
-  if (newX > 0 && newX < context->arena.width)
+  if (context->snake.dir.x)
   {
-    context->snake.head.x = newX;
+    auto newX = context->snake.head.x + (context->snake.dir.x > 0 ? 1 : -1);
+    if (newX > 0 && newX < context->arena.width)
+    {
+      context->snake.head.x = newX;
+    }
   }
 
-  auto newY = context->snake.head.y + (context->snake.dir.y ? 1 : -1);
-  if (newY > 0 && newY < context->arena.height)
+  if (context->snake.dir.y)
   {
-    context->snake.head.y = newY;
-  } 
+    auto newY = context->snake.head.y + (context->snake.dir.y > 0 ? 1 : -1);
+    if (newY > 0 && newY < context->arena.height)
+    {
+      context->snake.head.y = newY;
+    } 
+  }
 }
 
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
@@ -123,7 +129,25 @@ int main(int argc, char **argv)
       switch (event.type)
       {
         case SDL_QUIT: should_quit = true; break;
-        case SDL_KEYDOWN: trace("Keydown"); break;
+        case SDL_KEYDOWN: {
+          // Por hora apenas o keydown me interessa
+          trace("Keydown");
+          if (event.key.state == SDL_PRESSED) // Keydown deve sempre ser keypressed, mas...
+          {
+            if (!event.key.repeat) // Pula as repetições no futuro
+            {
+              context.snake.dir.x = 0;
+              context.snake.dir.y = 0;
+              switch (event.key.keysym.scancode)
+              {
+                case SDL_SCANCODE_W: { context.snake.dir.y = -1; } break;
+                case SDL_SCANCODE_S: { context.snake.dir.y = 1; } break;
+                case SDL_SCANCODE_A: { context.snake.dir.x = -1; } break;
+                case SDL_SCANCODE_D: { context.snake.dir.x = 1; } break;
+              }
+            }
+          }
+        } break;
         case SDL_MOUSEMOTION: {
           printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
           context.x = event.motion.x;
