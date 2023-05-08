@@ -7,6 +7,11 @@ struct Vec2
     T y;
 };
 
+typedef struct Arena {
+    unsigned width;
+    unsigned height;
+} Arena;
+
 typedef struct Snake_Entity
 {
     Vec2<unsigned> head;

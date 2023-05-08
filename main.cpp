@@ -16,9 +16,29 @@ typedef struct Context_Data {
     .head = { .x = 3, .y = 5, },
     .dir = { .x = true, .y = true, },
   };
+  Arena arena {
+    .width = 30,
+    .height = 30,
+  };
 } Context_Data;
 
 static Context_Data context = { 0 };
+
+void update(Context_Data *context)
+{
+  // Movimento e espaço restringido é garantido aqui
+  auto newX = context->snake.head.x + (context->snake.dir.x ? 1 : -1);
+  if (newX > 0 && newX < context->arena.width)
+  {
+    context->snake.head.x = newX;
+  }
+
+  auto newY = context->snake.head.y + (context->snake.dir.y ? 1 : -1);
+  if (newY > 0 && newY < context->arena.height)
+  {
+    context->snake.head.y = newY;
+  } 
+}
 
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
 {
@@ -114,9 +134,8 @@ int main(int argc, char **argv)
     }
 
     // Lógica de atualização
-    // @note temporário para testar a renderização
-    context.snake.head.x++;
-
+    update(&context);
+   
     // Renderiza
     render_scene(renderer, &context);
 
