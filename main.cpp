@@ -6,8 +6,8 @@
 #include "./dev-utils.c"
 #include "./snake.c"
 
-static constexpr int WIDTH = 600;
-static constexpr int HEIGHT = 400;
+static constexpr int WIDTH = 700;
+static constexpr int HEIGHT = 700;
 
 typedef struct Context_Data {
   int32_t x;
@@ -19,6 +19,7 @@ typedef struct Context_Data {
   Arena arena {
     .width = 30,
     .height = 30,
+    .cell_size = 20,
   };
 } Context_Data;
 
@@ -63,7 +64,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   SDL_RenderFillRect(renderer, &rect);
 
   // Renderiza o quadrado da posição da cabeça da cobra
-  constexpr unsigned snake_rect_size = 10;
+  const unsigned snake_rect_size = context->arena.cell_size;
   SDL_Rect snake_rect = {
     .x = context->snake.head.x * snake_rect_size, .y = context->snake.head.y * snake_rect_size,
     .w = snake_rect_size, .h = snake_rect_size
@@ -164,7 +165,7 @@ int main(int argc, char **argv)
     render_scene(renderer, &context);
 
     // @note Solução temporária para aliviar a CPU e manter a lógica rodando na velocidade certa
-    constexpr uint32_t TIMES_PER_SECOND = 8; 
+    constexpr uint32_t TIMES_PER_SECOND = 4; 
     SDL_Delay(1000 / TIMES_PER_SECOND);
   }
 

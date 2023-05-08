@@ -10,6 +10,7 @@ struct Vec2
 typedef struct Arena {
     unsigned width;
     unsigned height;
+    signed cell_size;
 } Arena;
 
 typedef struct Snake_Entity
