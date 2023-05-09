@@ -15,6 +15,7 @@ typedef struct Context_Data {
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
     .dir = { .x = 0, .y = 0, },
+    .body = new std::deque<Vec2<unsigned>>(),
   };
   Arena arena {
     .width = 30,
@@ -27,6 +28,12 @@ static Context_Data context = { 0 };
 
 void update(Context_Data *context)
 {
+  context->snake.body->push_front(context->snake.head);
+  context->snake.body->pop_back();
+  #ifndef NO_TRACE
+    printf("body size: %d", context->snake.body->size());
+  #endif
+
   // Movimento e espaço restringido é garantido aqui
   if (context->snake.dir.x)
   {
@@ -62,6 +69,20 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
   SDL_RenderFillRect(renderer, &rect);
+
+  // Renderizando corpo @note em andamento
+  for (auto &ref : *context->snake.body)
+  {
+    // Renderiza o quadrado da posição da cabeça da cobra
+    const unsigned snake_rect_size = context->arena.cell_size;
+    SDL_Rect snake_rect = {
+      .x = ref.x * snake_rect_size, .y = ref.y * snake_rect_size,
+      .w = snake_rect_size, .h = snake_rect_size
+    };
+
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_RenderFillRect(renderer, &snake_rect);
+  }
 
   // Renderiza o quadrado da posição da cabeça da cobra
   const unsigned snake_rect_size = context->arena.cell_size;

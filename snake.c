@@ -17,4 +17,5 @@ typedef struct Snake_Entity
 {
     Vec2<unsigned> head;
     Vec2<signed> dir;
+    std::deque<Vec2<unsigned>> *body; 
 } Snake_Entity;
