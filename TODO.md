@@ -4,3 +4,10 @@
 * desenhar um quadrado colorido
 * Usar os eventos de click e teclado
 * Ativar o loop de renderização e animar alguma coisa
+
+# Adicionar lógica do jogo
+
+* crescer a cobrinha conforme for comendo frutas
+* remover frutas comidas
+* adicionar mais frutas
+* limitar os movimentos 
