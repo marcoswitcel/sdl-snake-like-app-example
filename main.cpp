@@ -39,7 +39,7 @@ void update(Context_Data *context)
   if (context->snake.dir.x)
   {
     auto newX = context->snake.head.x + (context->snake.dir.x > 0 ? 1 : -1);
-    if (newX > 0 && newX < context->arena.width)
+    if (newX >= 0 && newX < context->arena.width)
     {
       context->snake.head.x = newX;
     }
@@ -48,7 +48,7 @@ void update(Context_Data *context)
   if (context->snake.dir.y)
   {
     auto newY = context->snake.head.y + (context->snake.dir.y > 0 ? 1 : -1);
-    if (newY > 0 && newY < context->arena.height)
+    if (newY >= 0 && newY < context->arena.height)
     {
       context->snake.head.y = newY;
     } 
