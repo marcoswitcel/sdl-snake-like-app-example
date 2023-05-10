@@ -21,6 +21,7 @@ typedef struct Context_Data {
     .width = 30,
     .height = 30,
     .cell_size = 20,
+    .fruits = new std::deque<Vec2<unsigned>>(),
   };
 } Context_Data;
 
@@ -67,7 +68,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     .w = rect_size, .h = rect_size
   };
 
-  SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderFillRect(renderer, &rect);
 
   // Renderizando corpo @note em andamento
@@ -93,6 +94,19 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
   SDL_RenderFillRect(renderer, &snake_rect);
+
+  // Renderizando as frutas
+  for (auto &ref : *context->arena.fruits)
+  {
+    const unsigned fruit_size = context->arena.cell_size;
+    SDL_Rect fruit_rect = {
+      .x = ref.x * fruit_size, .y = ref.y * fruit_size,
+      .w = fruit_size, .h = fruit_size
+    };
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_RenderFillRect(renderer, &fruit_rect);
+  }
 
   // Faz o swap do backbuffer com o buffer da tela?
   // @link https://wiki.libsdl.org/SDL2/SDL_RenderPresent
@@ -136,6 +150,9 @@ int main(int argc, char **argv)
     fprintf(stderr, "O Renderer SDL não pode inicializar corretamente: %s\n", SDL_GetError());
     return EXIT_FAILURE;
   }
+
+  context.arena.fruits->push_front(Vec2<unsigned> { .x = 0, .y = 0, });
+  context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 6, });
 
   SDL_Event event;
   bool should_quit = false;
