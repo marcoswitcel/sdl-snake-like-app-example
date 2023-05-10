@@ -7,7 +7,7 @@
 
 # Adicionar lógica do jogo
 
-* crescer a cobrinha conforme for comendo frutas
-* remover frutas comidas
+* crescer a cobrinha conforme for comendo frutas -- ok
+* remover frutas comidas -- ok
 * adicionar mais frutas
 * limitar os movimentos 

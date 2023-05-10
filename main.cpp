@@ -29,8 +29,9 @@ static Context_Data context = { 0 };
 
 void update(Context_Data *context)
 {
+  // Salva última localização da head
   context->snake.body->push_front(context->snake.head);
-  context->snake.body->pop_back();
+
   #ifndef NO_TRACE
     printf("body size: %d", context->snake.body->size());
   #endif
@@ -52,6 +53,24 @@ void update(Context_Data *context)
     {
       context->snake.head.y = newY;
     } 
+  }
+
+  // Checa se houve contato com um fruta, caso sim, a cobrinha vai crescer
+  bool should_grow = false;
+  int i = 0;
+  for (auto &ref : *context->arena.fruits)
+  {
+    if (ref.x == context->snake.head.x && ref.y == context->snake.head.y)
+    {
+      should_grow = true;
+      context->arena.fruits->erase(context->arena.fruits->begin() + i);
+      break;
+    }
+    i++;
+  }
+  if (!should_grow)
+  {
+    context->snake.body->pop_back();
   }
 }
 
