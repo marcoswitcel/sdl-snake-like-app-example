@@ -19,3 +19,4 @@ Trabalho em progresso
 * [https://wiki.libsdl.org/SDL2/SDL_Keysym](https://wiki.libsdl.org/SDL2/SDL_Keysym)
 * [https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html](https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html)
 * [https://stackoverflow.com/questions/27390078/gcc-compiling-c-code-undefined-reference-to-operator-newunsigned-long-lon](https://stackoverflow.com/questions/27390078/gcc-compiling-c-code-undefined-reference-to-operator-newunsigned-long-lon)
+* [https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c](https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c)

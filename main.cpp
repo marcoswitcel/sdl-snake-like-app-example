@@ -25,7 +25,7 @@ typedef struct Context_Data {
   };
 } Context_Data;
 
-static Context_Data context = { 0 };
+static Context_Data context = { };
 
 void handle_input(Context_Data *context, bool *should_quit)
 {
@@ -73,7 +73,7 @@ void update(Context_Data *context)
   context->snake.body->push_front(context->snake.head);
 
   #ifndef NO_TRACE
-    printf("body size: %d", context->snake.body->size());
+    printf("body size: %ld", context->snake.body->size());
   #endif
 
   // Movimento e espaço restringido é garantido aqui
@@ -218,6 +218,7 @@ int main(int argc, char **argv)
   {
     trace_timed("Entrando no loop");
 
+    // Processa eventos e inputs
     handle_input(&context, &should_quit);
 
     // Lógica de atualização
