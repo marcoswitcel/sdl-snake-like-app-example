@@ -91,6 +91,13 @@ void handle_input(Context_Data *context, bool *should_quit)
 
 void update(Context_Data *context)
 {
+  Snake_Entity &snake = context->snake;
+
+  if ((snake.dir.x == -1 && snake.head.x == 0) ||
+      (snake.dir.x == 1 && snake.head.x == context->arena.width - 1) ||
+      (snake.dir.y == -1 && snake.head.y == 0) ||
+      (snake.dir.y == 1 && snake.head.y == context->arena.height - 1)) return;
+
   // Salva última localização da head
   context->snake.body->push_front(context->snake.head);
 
