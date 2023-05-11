@@ -27,6 +27,46 @@ typedef struct Context_Data {
 
 static Context_Data context = { 0 };
 
+void handle_input(Context_Data *context, bool *should_quit)
+{
+  SDL_Event event;
+  
+  // Processa inputs
+  while (SDL_PollEvent(&event))
+  {
+    trace("Processando evento:");
+    printf("%d\n", event.type);
+    switch (event.type)
+    {
+      case SDL_QUIT: *should_quit = true; break;
+      case SDL_KEYDOWN: {
+        // Por hora apenas o keydown me interessa
+        trace("Keydown");
+        if (event.key.state == SDL_PRESSED) // Keydown deve sempre ser keypressed, mas...
+        {
+          if (!event.key.repeat) // Pula as repetições no futuro
+          {
+            context->snake.dir.x = 0;
+            context->snake.dir.y = 0;
+            switch (event.key.keysym.scancode)
+            {
+              case SDL_SCANCODE_W: { context->snake.dir.y = -1; } break;
+              case SDL_SCANCODE_S: { context->snake.dir.y = 1; } break;
+              case SDL_SCANCODE_A: { context->snake.dir.x = -1; } break;
+              case SDL_SCANCODE_D: { context->snake.dir.x = 1; } break;
+            }
+          }
+        }
+      } break;
+      case SDL_MOUSEMOTION: {
+        printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
+        context->x = event.motion.x;
+        context->y = event.motion.y;
+      } break;
+    }
+  }
+}
+
 void update(Context_Data *context)
 {
   // Salva última localização da head
@@ -173,47 +213,12 @@ int main(int argc, char **argv)
   context.arena.fruits->push_front(Vec2<unsigned> { .x = 0, .y = 0, });
   context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 6, });
 
-  SDL_Event event;
   bool should_quit = false;
   while (!should_quit)
   {
     trace_timed("Entrando no loop");
 
-    // Processa inputs
-    while (SDL_PollEvent(&event))
-    {
-      trace("Processando evento:");
-      printf("%d\n", event.type);
-      switch (event.type)
-      {
-        case SDL_QUIT: should_quit = true; break;
-        case SDL_KEYDOWN: {
-          // Por hora apenas o keydown me interessa
-          trace("Keydown");
-          if (event.key.state == SDL_PRESSED) // Keydown deve sempre ser keypressed, mas...
-          {
-            if (!event.key.repeat) // Pula as repetições no futuro
-            {
-              context.snake.dir.x = 0;
-              context.snake.dir.y = 0;
-              switch (event.key.keysym.scancode)
-              {
-                case SDL_SCANCODE_W: { context.snake.dir.y = -1; } break;
-                case SDL_SCANCODE_S: { context.snake.dir.y = 1; } break;
-                case SDL_SCANCODE_A: { context.snake.dir.x = -1; } break;
-                case SDL_SCANCODE_D: { context.snake.dir.x = 1; } break;
-              }
-            }
-          }
-        } break;
-        case SDL_MOUSEMOTION: {
-          printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
-          context.x = event.motion.x;
-          context.y = event.motion.y;
-        } break;
-      }
-
-    }
+    handle_input(&context, &should_quit);
 
     // Lógica de atualização
     update(&context);
