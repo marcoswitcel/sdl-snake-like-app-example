@@ -46,14 +46,36 @@ void handle_input(Context_Data *context, bool *should_quit)
         {
           if (!event.key.repeat) // Pula as repetições no futuro
           {
-            context->snake.dir.x = 0;
-            context->snake.dir.y = 0;
             switch (event.key.keysym.scancode)
             {
-              case SDL_SCANCODE_W: { context->snake.dir.y = -1; } break;
-              case SDL_SCANCODE_S: { context->snake.dir.y = 1; } break;
-              case SDL_SCANCODE_A: { context->snake.dir.x = -1; } break;
-              case SDL_SCANCODE_D: { context->snake.dir.x = 1; } break;
+              case SDL_SCANCODE_W: {
+                if (!context->snake.dir.y)
+                {
+                  context->snake.dir.y = -1;
+                  context->snake.dir.x = 0;
+                }
+              } break;
+              case SDL_SCANCODE_S: {
+                if (!context->snake.dir.y)
+                {
+                  context->snake.dir.y = 1;
+                  context->snake.dir.x = 0;
+                }
+              } break;
+              case SDL_SCANCODE_A: {
+                if (!context->snake.dir.x)
+                {
+                  context->snake.dir.x = -1;
+                  context->snake.dir.y = 0;
+                }
+              } break;
+              case SDL_SCANCODE_D: {
+                if (!context->snake.dir.x)
+                {
+                  context->snake.dir.x = 1;
+                  context->snake.dir.y = 0;
+                }
+              } break;
             }
           }
         }
@@ -212,6 +234,8 @@ int main(int argc, char **argv)
 
   context.arena.fruits->push_front(Vec2<unsigned> { .x = 0, .y = 0, });
   context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 6, });
+  context.arena.fruits->push_front(Vec2<unsigned> { .x = 3, .y = 6, });
+  context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 3, });
 
   bool should_quit = false;
   while (!should_quit)
