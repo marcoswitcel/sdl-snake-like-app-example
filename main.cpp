@@ -10,8 +10,8 @@ static constexpr int WIDTH = 700;
 static constexpr int HEIGHT = 700;
 
 typedef struct Context_Data {
-  int32_t x;
-  int32_t y;
+  int32_t mouse_x;
+  int32_t mouse_y;
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
     .dir = { .x = 0, .y = 0, },
@@ -60,8 +60,8 @@ void handle_input(Context_Data *context, bool *should_quit)
       } break;
       case SDL_MOUSEMOTION: {
         printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
-        context->x = event.motion.x;
-        context->y = event.motion.y;
+        context->mouse_x = event.motion.x;
+        context->mouse_y = event.motion.y;
       } break;
     }
   }
@@ -123,7 +123,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   constexpr unsigned rect_size = 50;
   SDL_Rect rect = {
-    .x = context->x - rect_size/2, .y = context->y - rect_size/2,
+    .x = context->mouse_x - rect_size/2, .y = context->mouse_y - rect_size/2,
     .w = rect_size, .h = rect_size
   };
 
