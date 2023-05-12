@@ -28,6 +28,43 @@ typedef struct Context_Data {
 
 static Context_Data context = { };
 
+Vec2<unsigned> compute_next_snake_position(Context_Data *context)
+{
+  Vec2<unsigned> new_head_position = context->snake.head;
+  if (context->snake.dir == LEFT || context->snake.dir == RIGHT)
+  {
+    auto newX = context->snake.head.x + (context->snake.dir == RIGHT ? 1 : -1);
+    if (newX >= 0 && newX < context->arena.width)
+    {
+      new_head_position.x = newX;
+    }
+  }
+
+  if (context->snake.dir == UP || context->snake.dir == DOWN)
+  {
+    auto newY = context->snake.head.y + (context->snake.dir == DOWN ? 1 : -1);
+    if (newY >= 0 && newY < context->arena.height)
+    {
+      new_head_position.y = newY;
+    } 
+  }
+
+  return new_head_position;
+}
+
+bool is_next_snake_move_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
+{
+  for (auto &it : *context->snake.body)
+  {
+    if (it.x == new_head_position.x && it.y == new_head_position.y)
+    {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
@@ -72,6 +109,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 
 void update(Context_Data *context)
 {
+  // Atualiza direção da cobrinha seguindo algumas restrições
   switch (context->snake_dir_input)
   {
     case UP: {
@@ -101,11 +139,14 @@ void update(Context_Data *context)
   }
 
   Snake_Entity &snake = context->snake;
+  Vec2<unsigned> new_head_position = compute_next_snake_position(context);
+  bool is_heading_space_available = is_next_snake_move_valid(context, new_head_position);
 
   if ((snake.dir == LEFT && snake.head.x == 0) ||
       (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
       (snake.dir == UP && snake.head.y == 0) ||
-      (snake.dir == DOWN && snake.head.y == context->arena.height - 1)) return;
+      (snake.dir == DOWN && snake.head.y == context->arena.height - 1)||
+      !is_heading_space_available) return;
 
   // Salva última localização da head
   context->snake.body->push_front(context->snake.head);
@@ -115,23 +156,7 @@ void update(Context_Data *context)
   #endif
 
   // Movimento e espaço restringido é garantido aqui
-  if (context->snake.dir == LEFT || context->snake.dir == RIGHT)
-  {
-    auto newX = context->snake.head.x + (context->snake.dir == RIGHT ? 1 : -1);
-    if (newX >= 0 && newX < context->arena.width)
-    {
-      context->snake.head.x = newX;
-    }
-  }
-
-  if (context->snake.dir == UP || context->snake.dir == DOWN)
-  {
-    auto newY = context->snake.head.y + (context->snake.dir == DOWN ? 1 : -1);
-    if (newY >= 0 && newY < context->arena.height)
-    {
-      context->snake.head.y = newY;
-    } 
-  }
+  context->snake.head = new_head_position;
 
   // Checa se houve contato com um fruta, caso sim, a cobrinha vai crescer
   bool should_grow = false;
