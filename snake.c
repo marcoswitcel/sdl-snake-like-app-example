@@ -7,6 +7,14 @@ struct Vec2
     T y;
 };
 
+typedef enum Snake_Dir {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    NONE,
+} Snake_Dir;
+
 typedef struct Arena {
     unsigned width;
     unsigned height;
@@ -17,6 +25,6 @@ typedef struct Arena {
 typedef struct Snake_Entity
 {
     Vec2<unsigned> head;
-    Vec2<signed> dir;
+    Snake_Dir dir;
     std::deque<Vec2<unsigned>> *body; 
 } Snake_Entity;

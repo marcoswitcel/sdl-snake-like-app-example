@@ -14,7 +14,7 @@ typedef struct Context_Data {
   int32_t mouse_y;
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
-    .dir = { .x = 0, .y = 0, },
+    .dir = NONE,
     .body = new std::deque<Vec2<unsigned>>(),
   };
   Arena arena {
@@ -27,11 +27,12 @@ typedef struct Context_Data {
 
 static Context_Data context = { };
 
-void handle_input(Context_Data *context, bool *should_quit)
+void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
+  Snake_Dir snake_dir = NONE;
   SDL_Event event;
   
-  // Processa inputs
+  // Processa eventos
   while (SDL_PollEvent(&event))
   {
     trace("Processando evento:");
@@ -48,34 +49,10 @@ void handle_input(Context_Data *context, bool *should_quit)
           {
             switch (event.key.keysym.scancode)
             {
-              case SDL_SCANCODE_W: {
-                if (!context->snake.dir.y)
-                {
-                  context->snake.dir.y = -1;
-                  context->snake.dir.x = 0;
-                }
-              } break;
-              case SDL_SCANCODE_S: {
-                if (!context->snake.dir.y)
-                {
-                  context->snake.dir.y = 1;
-                  context->snake.dir.x = 0;
-                }
-              } break;
-              case SDL_SCANCODE_A: {
-                if (!context->snake.dir.x)
-                {
-                  context->snake.dir.x = -1;
-                  context->snake.dir.y = 0;
-                }
-              } break;
-              case SDL_SCANCODE_D: {
-                if (!context->snake.dir.x)
-                {
-                  context->snake.dir.x = 1;
-                  context->snake.dir.y = 0;
-                }
-              } break;
+              case SDL_SCANCODE_W: { snake_dir = UP;    } break;
+              case SDL_SCANCODE_S: { snake_dir = DOWN;  } break;
+              case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
+              case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
             }
           }
         }
@@ -87,16 +64,45 @@ void handle_input(Context_Data *context, bool *should_quit)
       } break;
     }
   }
+
+  // Processa inputs
+  switch (snake_dir)
+  {
+    case UP: {
+      if (context->snake.dir != DOWN)
+      {
+        context->snake.dir = UP;
+      }
+    } break;
+    case DOWN: {
+      if (context->snake.dir != UP)
+      {
+        context->snake.dir = DOWN;
+      }
+    } break;
+    case LEFT: {
+      if (context->snake.dir != RIGHT)
+      {
+        context->snake.dir = LEFT;
+      }
+    } break;
+    case RIGHT: {
+      if (context->snake.dir != LEFT)
+      {
+        context->snake.dir = RIGHT;
+      }
+    } break;
+  }
 }
 
 void update(Context_Data *context)
 {
   Snake_Entity &snake = context->snake;
 
-  if ((snake.dir.x == -1 && snake.head.x == 0) ||
-      (snake.dir.x == 1 && snake.head.x == context->arena.width - 1) ||
-      (snake.dir.y == -1 && snake.head.y == 0) ||
-      (snake.dir.y == 1 && snake.head.y == context->arena.height - 1)) return;
+  if ((snake.dir == LEFT && snake.head.x == 0) ||
+      (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
+      (snake.dir == UP && snake.head.y == 0) ||
+      (snake.dir == DOWN && snake.head.y == context->arena.height - 1)) return;
 
   // Salva última localização da head
   context->snake.body->push_front(context->snake.head);
@@ -106,18 +112,18 @@ void update(Context_Data *context)
   #endif
 
   // Movimento e espaço restringido é garantido aqui
-  if (context->snake.dir.x)
+  if (context->snake.dir == LEFT || context->snake.dir == RIGHT)
   {
-    auto newX = context->snake.head.x + (context->snake.dir.x > 0 ? 1 : -1);
+    auto newX = context->snake.head.x + (context->snake.dir == RIGHT ? 1 : -1);
     if (newX >= 0 && newX < context->arena.width)
     {
       context->snake.head.x = newX;
     }
   }
 
-  if (context->snake.dir.y)
+  if (context->snake.dir == UP || context->snake.dir == DOWN)
   {
-    auto newY = context->snake.head.y + (context->snake.dir.y > 0 ? 1 : -1);
+    auto newY = context->snake.head.y + (context->snake.dir == DOWN ? 1 : -1);
     if (newY >= 0 && newY < context->arena.height)
     {
       context->snake.head.y = newY;
@@ -250,7 +256,7 @@ int main(int argc, char **argv)
     trace_timed("Entrando no loop");
 
     // Processa eventos e inputs
-    handle_input(&context, &should_quit);
+    handle_events_and_inputs(&context, &should_quit);
 
     // Lógica de atualização
     update(&context);
