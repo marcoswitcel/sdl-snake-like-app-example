@@ -12,6 +12,7 @@ static constexpr int HEIGHT = 700;
 typedef struct Context_Data {
   int32_t mouse_x;
   int32_t mouse_y;
+  Snake_Dir snake_dir_input;
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
     .dir = NONE,
@@ -66,7 +67,12 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   }
 
   // Processa inputs
-  switch (snake_dir)
+  context->snake_dir_input = snake_dir;
+}
+
+void update(Context_Data *context)
+{
+  switch (context->snake_dir_input)
   {
     case UP: {
       if (context->snake.dir != DOWN)
@@ -93,10 +99,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
       }
     } break;
   }
-}
 
-void update(Context_Data *context)
-{
   Snake_Entity &snake = context->snake;
 
   if ((snake.dir == LEFT && snake.head.x == 0) ||
