@@ -21,3 +21,4 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/27390078/gcc-compiling-c-code-undefined-reference-to-operator-newunsigned-long-lon](https://stackoverflow.com/questions/27390078/gcc-compiling-c-code-undefined-reference-to-operator-newunsigned-long-lon)
 * [https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c](https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c)
 * [https://stackoverflow.com/questions/5740310/no-operator-found-while-comparing-structs-in-c](https://stackoverflow.com/questions/5740310/no-operator-found-while-comparing-structs-in-c)
+* [https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c](https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c)

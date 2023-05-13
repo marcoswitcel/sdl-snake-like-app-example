@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctime>
+#include <cstdlib>
 #include <SDL2/SDL.h>
 
 #include "./dev-utils.c"
@@ -27,6 +29,26 @@ typedef struct Context_Data {
 } Context_Data;
 
 static Context_Data context = { };
+
+Vec2<unsigned> index_to_arena_pos(unsigned index, Arena &arena)
+{
+  // @todo João, @note possivelmente bugado, não testado
+  return Vec2<unsigned> {
+    .x = index % arena.width,
+    .y = index / arena.width,
+  };
+}
+
+Vec2<unsigned> generate_new_fruit_position(Context_Data *context)
+{
+  Arena &arena = context->arena;
+  Snake_Entity &snake = context->snake;
+  
+  int total_available_cells = arena.width * arena.height;
+  total_available_cells -= snake.body->size() + 1;
+
+  return index_to_arena_pos(rand() % total_available_cells, arena);
+}
 
 Vec2<unsigned> compute_next_snake_position(Context_Data *context)
 {
@@ -109,6 +131,11 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 
 void update(Context_Data *context)
 {
+  if (context->arena.fruits->size() == 0)
+  {
+    context->arena.fruits->push_front(generate_new_fruit_position(context));
+  }
+
   // Atualiza direção da cobrinha seguindo algumas restrições
   switch (context->snake_dir_input)
   {
@@ -243,6 +270,10 @@ int main(int argc, char **argv)
   for (int i = 0; i < argc; i++) printf("%s ", argv[i]);
   printf(" ]\n");
 
+  time_t now = time(NULL);
+  srand(now);
+  printf("A seed é %ld\n", now);
+
   SDL_Window *window = NULL;
 
   if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -273,10 +304,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  context.arena.fruits->push_front(Vec2<unsigned> { .x = 0, .y = 0, });
-  context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 6, });
-  context.arena.fruits->push_front(Vec2<unsigned> { .x = 3, .y = 6, });
-  context.arena.fruits->push_front(Vec2<unsigned> { .x = 7, .y = 3, });
+  context.arena.fruits->push_front(generate_new_fruit_position(&context));
 
   bool should_quit = false;
   while (!should_quit)
