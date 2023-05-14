@@ -8,8 +8,11 @@
 #include "./dev-utils.c"
 #include "./snake.c"
 
-static constexpr int WIDTH = 700;
-static constexpr int HEIGHT = 700;
+static constexpr int CELL_SIZE = 20;
+static constexpr int ARENA_WIDTH = 30;
+static constexpr int ARENA_HEIGHT = 30;
+static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
+static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
 typedef struct Context_Data {
   int32_t mouse_x;
@@ -21,9 +24,9 @@ typedef struct Context_Data {
     .body = new std::deque<Vec2<unsigned>>(),
   };
   Arena arena {
-    .width = 30,
-    .height = 30,
-    .cell_size = 20,
+    .width = ARENA_WIDTH,
+    .height = ARENA_HEIGHT,
+    .cell_size = CELL_SIZE,
     .fruits = new std::deque<Vec2<unsigned>>(),
   };
 } Context_Data;

@@ -13,3 +13,4 @@
 * limitar os movimentos -- ok
 * criar perfis de cores? para a renderização do mapa
 * adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
+* adicionar paredes e talvez outros tipos de obstáculos
