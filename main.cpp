@@ -14,6 +14,13 @@ static constexpr int ARENA_HEIGHT = 30;
 static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
+static const SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
+static const SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
+static const SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
+
+// Cores
+static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
+
 typedef struct Context_Data {
   int32_t mouse_x;
   int32_t mouse_y;
@@ -211,7 +218,7 @@ void update(Context_Data *context)
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
 {
   // Seta o fundo do renderer
-  SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+  SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
 
   SDL_RenderClear(renderer);
 
@@ -221,7 +228,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     .w = rect_size, .h = rect_size
   };
 
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+  SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, WHITE_COLOR.a);
   SDL_RenderFillRect(renderer, &rect);
 
   // Renderizando corpo @note em andamento
@@ -234,7 +241,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       .w = snake_rect_size, .h = snake_rect_size
     };
 
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
     SDL_RenderFillRect(renderer, &snake_rect);
   }
 
@@ -245,7 +252,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     .w = snake_rect_size, .h = snake_rect_size
   };
 
-  SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+  SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, BG_COLOR.b, BG_COLOR.a);
   SDL_RenderFillRect(renderer, &snake_rect);
 
   // Renderizando as frutas
@@ -257,7 +264,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       .w = fruit_size, .h = fruit_size
     };
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+    SDL_SetRenderDrawColor(renderer, FRUIT_COLOR.r, FRUIT_COLOR.g, FRUIT_COLOR.b, FRUIT_COLOR.a);
     SDL_RenderFillRect(renderer, &fruit_rect);
   }
 

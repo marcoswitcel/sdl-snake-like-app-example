@@ -22,3 +22,5 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c](https://stackoverflow.com/questions/61240589/how-to-initialize-a-struct-to-0-in-c)
 * [https://stackoverflow.com/questions/5740310/no-operator-found-while-comparing-structs-in-c](https://stackoverflow.com/questions/5740310/no-operator-found-while-comparing-structs-in-c)
 * [https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c](https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c)
+* [https://wiki.libsdl.org/SDL2/SDL_Color](https://wiki.libsdl.org/SDL2/SDL_Color)
+* [https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlsetcolors.html](https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlsetcolors.html)
