@@ -131,6 +131,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 
 void update(Context_Data *context)
 {
+  // @todo João, ajustar para que não insira frutas dentro do corpo ou da posição atual da cabeça
   if (context->arena.fruits->size() == 0)
   {
     context->arena.fruits->push_front(generate_new_fruit_position(context));
@@ -282,7 +283,7 @@ int main(int argc, char **argv)
   }
 
   window = SDL_CreateWindow(
-    "Jogo da Cobrinha: SLD2",
+    "Jogo da Cobrinha: Feito com C/SDL 2",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
     WIDTH,

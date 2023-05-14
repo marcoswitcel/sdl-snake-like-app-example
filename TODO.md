@@ -9,5 +9,7 @@
 
 * crescer a cobrinha conforme for comendo frutas -- ok
 * remover frutas comidas -- ok
-* adicionar mais frutas
-* limitar os movimentos 
+* adicionar mais frutas -- parcialmente feito, ele permite adicionar frutas aonde já existe corpo da cobrinha e na cabeça também.
+* limitar os movimentos -- ok
+* criar perfis de cores? para a renderização do mapa
+* adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
