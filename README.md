@@ -24,3 +24,7 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c](https://stackoverflow.com/questions/13445688/how-to-generate-a-random-number-in-c)
 * [https://wiki.libsdl.org/SDL2/SDL_Color](https://wiki.libsdl.org/SDL2/SDL_Color)
 * [https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlsetcolors.html](https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlsetcolors.html)
+* [https://cplusplus.com/doc/tutorial/files/](https://cplusplus.com/doc/tutorial/files/)
+* [https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exists-using-standard-c-c11-14-17-c](https://stackoverflow.com/questions/12774207/fastest-way-to-check-if-a-file-exists-using-standard-c-c11-14-17-c)
+* [https://stackoverflow.com/questions/7868936/read-file-line-by-line-using-ifstream-in-c](https://stackoverflow.com/questions/7868936/read-file-line-by-line-using-ifstream-in-c)
+* [https://stackoverflow.com/questions/27093288/c-stringstream-error-handling](https://stackoverflow.com/questions/27093288/c-stringstream-error-handling)

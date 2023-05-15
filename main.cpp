@@ -3,6 +3,9 @@
 #include <stdbool.h>
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <SDL2/SDL.h>
 
 #include "./dev-utils.c"
@@ -39,6 +42,45 @@ typedef struct Context_Data {
 } Context_Data;
 
 static Context_Data context = { };
+
+
+void load_ini_config()
+{
+  trace("Checando config.ini");
+
+  std::ifstream file_handle("config.ini", std::ios::in);
+
+  if (!file_handle.good())
+  {
+    trace("-- arquivo não encontrado, configurações padrão apenas")
+    return;
+  }
+
+  std::string line;
+  while (std::getline(file_handle, line))
+  {
+    trace("linha encontrada");
+    /*
+    std::istringstream iss(line);
+
+    std::string command;
+    iss >> command;
+
+    bool success = !iss.fail();
+
+    if (success) {
+      trace("linha parseada");
+      trace(command);
+    } else {
+      trace("linha ignorada");
+    }
+    */
+  }
+
+  file_handle.close();
+
+  trace("Arquivo encontrado configurações carregadas");
+}
 
 Vec2<unsigned> index_to_arena_pos(unsigned index, Arena &arena)
 {
@@ -284,6 +326,11 @@ int main(int argc, char **argv)
   time_t now = time(NULL);
   srand(now);
   printf("A seed é %ld\n", now);
+
+  // Aplicar configurações caso existam
+  load_ini_config();
+
+  return 0;
 
   SDL_Window *window = NULL;
 
