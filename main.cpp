@@ -17,7 +17,7 @@ static constexpr int ARENA_HEIGHT = 30;
 static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
-static const SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
+static SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
 static const SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
 static const SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
 
@@ -55,26 +55,48 @@ void load_ini_config()
     trace("-- arquivo não encontrado, configurações padrão apenas")
     return;
   }
-
+  const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
   std::string line;
   while (std::getline(file_handle, line))
   {
     trace("linha encontrada");
-    /*
     std::istringstream iss(line);
 
     std::string command;
     iss >> command;
+    int r, g, b, a;
 
     bool success = !iss.fail();
 
     if (success) {
       trace("linha parseada");
-      trace(command);
+      trace(command.c_str());
+
+      // @todo João, finalizar, mais comandos aqui
+      if (BACKGROUD_COLOR_COMMAND == command)
+      {
+        iss >> r;
+        if (iss.fail() || r > SDL_MAX_UINT8) continue;
+        
+        iss >> g;
+        if (iss.fail() || g > SDL_MAX_UINT8) continue;
+        
+        iss >> b;
+        if (iss.fail() || b > SDL_MAX_UINT8) continue;
+        
+        iss >> a;
+        if (iss.fail() || a > SDL_MAX_UINT8) continue;
+
+        trace("Executado");
+        BG_COLOR.r = static_cast<uint8_t>(r);
+        BG_COLOR.g = static_cast<uint8_t>(g);
+        BG_COLOR.b = static_cast<uint8_t>(b);
+        BG_COLOR.a = static_cast<uint8_t>(a);
+        printf("%d %d %d %d",r,g,b,a);
+      }
     } else {
       trace("linha ignorada");
     }
-    */
   }
 
   file_handle.close();
@@ -294,7 +316,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     .w = snake_rect_size, .h = snake_rect_size
   };
 
-  SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, BG_COLOR.b, BG_COLOR.a);
+  SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
   SDL_RenderFillRect(renderer, &snake_rect);
 
   // Renderizando as frutas
@@ -329,8 +351,6 @@ int main(int argc, char **argv)
 
   // Aplicar configurações caso existam
   load_ini_config();
-
-  return 0;
 
   SDL_Window *window = NULL;
 

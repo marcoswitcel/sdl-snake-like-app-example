@@ -29,3 +29,8 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/7868936/read-file-line-by-line-using-ifstream-in-c](https://stackoverflow.com/questions/7868936/read-file-line-by-line-using-ifstream-in-c)
 * [https://stackoverflow.com/questions/27093288/c-stringstream-error-handling](https://stackoverflow.com/questions/27093288/c-stringstream-error-handling)
 * [https://stackoverflow.com/questions/1789594/how-do-i-write-the-cd-command-in-a-makefile](https://stackoverflow.com/questions/1789594/how-do-i-write-the-cd-command-in-a-makefile)
+* [https://stackoverflow.com/questions/1878001/how-do-i-check-if-a-c-stdstring-starts-with-a-certain-string-and-convert-a](https://stackoverflow.com/questions/1878001/how-do-i-check-if-a-c-stdstring-starts-with-a-certain-string-and-convert-a)
+* [https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt](https://en.cppreference.com/w/cpp/string/basic_string/operator_ltltgtgt)
+* [https://www.digitalocean.com/community/tutorials/compare-strings-in-c-plus-plus](https://www.digitalocean.com/community/tutorials/compare-strings-in-c-plus-plus)
+* [https://stackoverflow.com/questions/2951464/byte-from-string-int-in-c](https://stackoverflow.com/questions/2951464/byte-from-string-int-in-c)
+* [https://stackoverflow.com/questions/9158894/differences-between-c-string-and-compare](https://stackoverflow.com/questions/9158894/differences-between-c-string-and-compare)
