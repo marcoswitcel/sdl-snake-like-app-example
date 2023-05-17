@@ -397,7 +397,7 @@ int main(int argc, char **argv)
   }
 
   window = SDL_CreateWindow(
-    "Jogo da Cobrinha: Feito com C/SDL 2",
+    "Jogo da Cobrinha: Feito com C++/SDL 2",
     SDL_WINDOWPOS_CENTERED,
     SDL_WINDOWPOS_CENTERED,
     WIDTH,
