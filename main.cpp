@@ -18,8 +18,8 @@ static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
 static SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
-static const SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
-static const SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
+static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
+static SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
@@ -43,6 +43,38 @@ typedef struct Context_Data {
 
 static Context_Data context = { };
 
+bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
+{
+  trace("Tentando parsear cores");
+  int r, g, b, a;
+
+  iss >> r;
+  if (iss.fail() || r > SDL_MAX_UINT8) goto fail;
+  
+  iss >> g;
+  if (iss.fail() || g > SDL_MAX_UINT8) goto fail;
+  
+  iss >> b;
+  if (iss.fail() || b > SDL_MAX_UINT8) goto fail;
+  
+  iss >> a;
+  if (iss.fail() || a > SDL_MAX_UINT8) goto fail;
+
+  trace("Cor consumida e aplicada");
+  color.r = static_cast<uint8_t>(r);
+  color.g = static_cast<uint8_t>(g);
+  color.b = static_cast<uint8_t>(b);
+  color.a = static_cast<uint8_t>(a);
+
+  printf("%d %d %d %d",r,g,b,a);
+
+  return true;
+
+  fail: {
+    trace("Não conseguiu aplicar a cor");
+    return false;
+  }
+}
 
 void load_ini_config()
 {
@@ -56,15 +88,15 @@ void load_ini_config()
     return;
   }
   const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
+  const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";  
+  const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";  
   std::string line;
   while (std::getline(file_handle, line))
   {
     trace("linha encontrada");
     std::istringstream iss(line);
-
     std::string command;
     iss >> command;
-    int r, g, b, a;
 
     bool success = !iss.fail();
 
@@ -73,27 +105,9 @@ void load_ini_config()
       trace(command.c_str());
 
       // @todo João, finalizar, mais comandos aqui
-      if (BACKGROUD_COLOR_COMMAND == command)
-      {
-        iss >> r;
-        if (iss.fail() || r > SDL_MAX_UINT8) continue;
-        
-        iss >> g;
-        if (iss.fail() || g > SDL_MAX_UINT8) continue;
-        
-        iss >> b;
-        if (iss.fail() || b > SDL_MAX_UINT8) continue;
-        
-        iss >> a;
-        if (iss.fail() || a > SDL_MAX_UINT8) continue;
-
-        trace("Executado");
-        BG_COLOR.r = static_cast<uint8_t>(r);
-        BG_COLOR.g = static_cast<uint8_t>(g);
-        BG_COLOR.b = static_cast<uint8_t>(b);
-        BG_COLOR.a = static_cast<uint8_t>(a);
-        printf("%d %d %d %d",r,g,b,a);
-      }
+      if (BACKGROUD_COLOR_COMMAND == command) { try_parse_and_apply_color(BG_COLOR, iss); }
+      else if (SNAKE_COLOR_COMMAND == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
+      else if (FRUIT_COLOR_COMMAND == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
     } else {
       trace("linha ignorada");
     }
