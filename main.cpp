@@ -17,6 +17,7 @@ static constexpr int ARENA_HEIGHT = 30;
 static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
+static unsigned TIMES_PER_SECOND = 4; 
 static SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
 static SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
@@ -66,7 +67,7 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   color.b = static_cast<uint8_t>(b);
   color.a = static_cast<uint8_t>(a);
 
-  printf("%d %d %d %d",r,g,b,a);
+  printf("%d %d %d %d\n",r,g,b,a);
 
   return true;
 
@@ -74,6 +75,23 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
     trace("Não conseguiu aplicar a cor");
     return false;
   }
+}
+
+bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
+{
+  trace("Tentando parsear número");
+  unsigned local_number;
+
+  iss >> local_number;
+  if (iss.fail()) {
+    trace("Não conseguiu aplciar o número");
+    return false;
+  }
+  
+  trace("Número consumido e aplicado");
+  number = local_number;
+
+  printf("%d %d %d %d\n",local_number);
 }
 
 void load_ini_config()
@@ -88,8 +106,9 @@ void load_ini_config()
     return;
   }
   const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
-  const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";  
-  const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";  
+  const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";
+  const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";
+  const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
   std::string line;
   while (std::getline(file_handle, line))
   {
@@ -108,6 +127,7 @@ void load_ini_config()
       if (BACKGROUD_COLOR_COMMAND == command) { try_parse_and_apply_color(BG_COLOR, iss); }
       else if (SNAKE_COLOR_COMMAND == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
       else if (FRUIT_COLOR_COMMAND == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
+      else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
     } else {
       trace("linha ignorada");
     }
@@ -413,7 +433,6 @@ int main(int argc, char **argv)
     render_scene(renderer, &context);
 
     // @note Solução temporária para aliviar a CPU e manter a lógica rodando na velocidade certa
-    constexpr uint32_t TIMES_PER_SECOND = 4; 
     SDL_Delay(1000 / TIMES_PER_SECOND);
   }
 
