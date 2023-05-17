@@ -1,5 +1,5 @@
 main: main.cpp
-	$(CC) main.cpp -o target/main -Wall -Wextra -pedantic -std=c++2a -lSDL2 -lstdc++
+	$(CC) main.cpp -o target/main -Wall -Wextra -pedantic -std=c++2a -lSDL2 -lstdc++ -DDEV_CODE_ENABLED
 run: main
 	@echo "cd ./target"
 	@echo ./main

@@ -221,6 +221,9 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_S: { snake_dir = DOWN;  } break;
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
+#ifdef DEV_CODE_ENABLED
+              case SDL_SCANCODE_R: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
+#endif
             }
           }
         }
