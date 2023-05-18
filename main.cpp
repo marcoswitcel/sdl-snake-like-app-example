@@ -338,6 +338,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   const unsigned snake_rect_size = context->arena.cell_size;  
 
   // Renderizando corpo
+  unsigned i = 0;
   for (auto &ref : *context->snake.body)
   {
     // renderiza uma parte do corpo
@@ -346,8 +347,12 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       .w = snake_rect_size, .h = snake_rect_size
     };
 
-    SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
+    // @todo João, melhorar organização, fazer uma função que calcula uma porcentagem de um valor e retorna no mesmo tipo?
+    if (i % 2) SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
+    else SDL_SetRenderDrawColor(renderer, (Uint8) ((float) SNAKE_COLOR.r * 0.96), (Uint8) ((float) SNAKE_COLOR.g * 0.96), (Uint8) ((float) SNAKE_COLOR.b * 0.96), SNAKE_COLOR.a);
+ 
     SDL_RenderFillRect(renderer, &snake_rect);
+    i++;
   }
 
   // Renderiza o quadrado da posição da cabeça da cobra
