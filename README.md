@@ -35,3 +35,4 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/2951464/byte-from-string-int-in-c](https://stackoverflow.com/questions/2951464/byte-from-string-int-in-c)
 * [https://stackoverflow.com/questions/9158894/differences-between-c-string-and-compare](https://stackoverflow.com/questions/9158894/differences-between-c-string-and-compare)
 * [https://stackoverflow.com/questions/52955811/how-to-disable-enumeration-value-not-explicitly-handled-in-switch-just-for-one](https://stackoverflow.com/questions/52955811/how-to-disable-enumeration-value-not-explicitly-handled-in-switch-just-for-one)
+* [https://www.gnu.org/software/make/manual/make.html](https://www.gnu.org/software/make/manual/make.html)
