@@ -380,6 +380,12 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 int main(int argc, char **argv)
 {
   printf("Olá mundo do SDL!\n");
+  #ifdef DEV_CODE_ENABLED
+  printf("=====================================\n");
+
+  printf("|          DEV Build                |\n");
+  printf("=====================================\n");
+  #endif
 
   printf("Argumentos providos:\n[ ");
   for (int i = 0; i < argc; i++) printf("%s ", argv[i]);
