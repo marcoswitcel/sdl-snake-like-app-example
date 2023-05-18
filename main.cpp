@@ -335,11 +335,12 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, WHITE_COLOR.a);
   SDL_RenderFillRect(renderer, &rect);
 
-  // Renderizando corpo @note em andamento
+  const unsigned snake_rect_size = context->arena.cell_size;  
+
+  // Renderizando corpo
   for (auto &ref : *context->snake.body)
   {
-    // Renderiza o quadrado da posição da cabeça da cobra
-    const unsigned snake_rect_size = context->arena.cell_size;
+    // renderiza uma parte do corpo
     SDL_Rect snake_rect = {
       .x = ref.x * snake_rect_size, .y = ref.y * snake_rect_size,
       .w = snake_rect_size, .h = snake_rect_size
@@ -350,14 +351,15 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   }
 
   // Renderiza o quadrado da posição da cabeça da cobra
-  const unsigned snake_rect_size = context->arena.cell_size;
-  SDL_Rect snake_rect = {
-    .x = context->snake.head.x * snake_rect_size, .y = context->snake.head.y * snake_rect_size,
-    .w = snake_rect_size, .h = snake_rect_size
-  };
+  {
+    SDL_Rect snake_rect = {
+      .x = context->snake.head.x * snake_rect_size, .y = context->snake.head.y * snake_rect_size,
+      .w = snake_rect_size, .h = snake_rect_size
+    };
 
-  SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
-  SDL_RenderFillRect(renderer, &snake_rect);
+    SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
+    SDL_RenderFillRect(renderer, &snake_rect);
+  }
 
   // Renderizando as frutas
   for (auto &ref : *context->arena.fruits)
