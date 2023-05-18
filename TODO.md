@@ -15,5 +15,5 @@
 * adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
 * adicionar paredes e talvez outros tipos de obstáculos
 * trocar para g++ -- ok
-* ajustar para copiar sample de configurações
+* ajustar para copiar sample de configurações -- ok
 * ajustar argumentos do compilador

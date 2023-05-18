@@ -1,8 +1,11 @@
 # usando g++ não precisa do parâmetro -lstdc++
-CC=g++
+CC = g++
+CFLAGS = -Wall -Wextra -pedantic -std=c++2a
+LFLAGS = -lSDL2
+DEF = -DDEV_CODE_ENABLED
 
 main: main.cpp
-	$(CC) main.cpp -o target/main -Wall -Wextra -pedantic -std=c++2a -lSDL2 -DDEV_CODE_ENABLED
+	$(CC) main.cpp -o target/main $(CFLAGS) $(LFLAGS) $(DEF)
 run: main
 	@echo "cd ./target"
 	@echo ./main
