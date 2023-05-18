@@ -201,6 +201,8 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   SDL_Event event;
   
   // Processa eventos
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wswitch"
   while (SDL_PollEvent(&event))
   {
     trace("Processando evento:");
@@ -235,6 +237,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
       } break;
     }
   }
+  #pragma GCC diagnostic pop
 
   // Processa inputs
   context->snake_dir_input = snake_dir;
