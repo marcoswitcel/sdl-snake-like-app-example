@@ -19,6 +19,7 @@ typedef struct Arena {
     unsigned width;
     unsigned height;
     signed cell_size;
+    std::deque<Vec2<unsigned>> *walls;
     std::deque<Vec2<unsigned>> *fruits; 
 } Arena;
 

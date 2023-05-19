@@ -38,6 +38,7 @@ typedef struct Context_Data {
     .width = ARENA_WIDTH,
     .height = ARENA_HEIGHT,
     .cell_size = CELL_SIZE,
+    .walls = new std::deque<Vec2<unsigned>>(),
     .fruits = new std::deque<Vec2<unsigned>>(),
   };
 } Context_Data;
@@ -164,8 +165,8 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
   Vec2<unsigned> new_head_position = context->snake.head;
   if (context->snake.dir == LEFT || context->snake.dir == RIGHT)
   {
-    auto newX = context->snake.head.x + (context->snake.dir == RIGHT ? 1 : -1);
-    if (newX >= 0 && newX < context->arena.width)
+    signed newX = context->snake.head.x + (context->snake.dir == RIGHT ? 1 : -1);
+    if (newX >= 0 && newX < (signed) context->arena.width)
     {
       new_head_position.x = newX;
     }
@@ -173,8 +174,8 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
 
   if (context->snake.dir == UP || context->snake.dir == DOWN)
   {
-    auto newY = context->snake.head.y + (context->snake.dir == DOWN ? 1 : -1);
-    if (newY >= 0 && newY < context->arena.height)
+    signed newY = context->snake.head.y + (context->snake.dir == DOWN ? 1 : -1);
+    if (newY >= 0 && newY < (signed) context->arena.height)
     {
       new_head_position.y = newY;
     } 
@@ -279,6 +280,7 @@ void update(Context_Data *context)
         context->snake.dir = RIGHT;
       }
     } break;
+    case NONE: {} break;
   }
 
   Snake_Entity &snake = context->snake;
@@ -320,6 +322,16 @@ void update(Context_Data *context)
   }
 }
 
+static inline SDL_Rect makeSquare(const Vec2<unsigned> &pos, unsigned arena_rect_size)
+{
+  return {
+    .x = (int) (pos.x * arena_rect_size),
+    .y = (int) (pos.y * arena_rect_size),
+    .w = (int) arena_rect_size,
+    .h = (int) arena_rect_size,
+  };
+}
+
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
 {
   // Seta o fundo do renderer
@@ -329,24 +341,21 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   constexpr unsigned rect_size = 50;
   SDL_Rect rect = {
-    .x = context->mouse_x - rect_size/2, .y = context->mouse_y - rect_size/2,
-    .w = rect_size, .h = rect_size
+    .x = (int) (context->mouse_x - rect_size/2), .y = (int) (context->mouse_y - rect_size/2),
+    .w = (int) rect_size, .h = (int) rect_size
   };
 
   SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, WHITE_COLOR.a);
   SDL_RenderFillRect(renderer, &rect);
 
-  const unsigned snake_rect_size = context->arena.cell_size;  
+  const unsigned arena_rect_size = context->arena.cell_size;  
 
   // Renderizando corpo
   unsigned i = 0;
   for (auto &ref : *context->snake.body)
   {
     // renderiza uma parte do corpo
-    SDL_Rect snake_rect = {
-      .x = ref.x * snake_rect_size, .y = ref.y * snake_rect_size,
-      .w = snake_rect_size, .h = snake_rect_size
-    };
+    SDL_Rect snake_rect = makeSquare(ref, arena_rect_size);
 
     // @todo João, melhorar organização, fazer uma função que calcula uma porcentagem de um valor e retorna no mesmo tipo?
     if (i % 2) SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
@@ -358,10 +367,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   // Renderiza o quadrado da posição da cabeça da cobra
   {
-    SDL_Rect snake_rect = {
-      .x = context->snake.head.x * snake_rect_size, .y = context->snake.head.y * snake_rect_size,
-      .w = snake_rect_size, .h = snake_rect_size
-    };
+    SDL_Rect snake_rect = makeSquare(context->snake.head, arena_rect_size);
 
     SDL_SetRenderDrawColor(renderer, SNAKE_COLOR.r, SNAKE_COLOR.g, SNAKE_COLOR.b, SNAKE_COLOR.a);
     SDL_RenderFillRect(renderer, &snake_rect);
@@ -370,11 +376,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   // Renderizando as frutas
   for (auto &ref : *context->arena.fruits)
   {
-    const unsigned fruit_size = context->arena.cell_size;
-    SDL_Rect fruit_rect = {
-      .x = ref.x * fruit_size, .y = ref.y * fruit_size,
-      .w = fruit_size, .h = fruit_size
-    };
+    SDL_Rect fruit_rect = makeSquare(ref, arena_rect_size);
 
     SDL_SetRenderDrawColor(renderer, FRUIT_COLOR.r, FRUIT_COLOR.g, FRUIT_COLOR.b, FRUIT_COLOR.a);
     SDL_RenderFillRect(renderer, &fruit_rect);
