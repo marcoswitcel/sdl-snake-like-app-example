@@ -21,6 +21,7 @@ static unsigned TIMES_PER_SECOND = 4;
 static SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
 static SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
+static SDL_Color WALL_COLOR  = { .r = 100, .g = 100, .b = 100, .a = 255 }; // Trocar a cor?
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
@@ -187,6 +188,16 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
 bool is_next_snake_move_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
 {
   for (auto &it : *context->snake.body)
+  {
+    if (it.x == new_head_position.x && it.y == new_head_position.y)
+    {
+      return false;
+    }
+  }
+
+  // @todo João, manter o olho aqui, essa estratégia não escala para outros tipos,
+  // talvez fazer uma lista única com "objetos" com tipo e posição, ou um hash espacial
+  for (auto &it : *context->arena.walls)
   {
     if (it.x == new_head_position.x && it.y == new_head_position.y)
     {
@@ -382,6 +393,15 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     SDL_RenderFillRect(renderer, &fruit_rect);
   }
 
+  // Renderizando as paredes
+  for (auto &ref : *context->arena.walls)
+  {
+    SDL_Rect fruit_rect = makeSquare(ref, arena_rect_size);
+
+    SDL_SetRenderDrawColor(renderer, WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a);
+    SDL_RenderFillRect(renderer, &fruit_rect);
+  }
+
   // Faz o swap do backbuffer com o buffer da tela?
   // @link https://wiki.libsdl.org/SDL2/SDL_RenderPresent
   SDL_RenderPresent(renderer);
@@ -439,6 +459,8 @@ int main(int argc, char **argv)
   }
 
   context.arena.fruits->push_front(generate_new_fruit_position(&context));
+  // @todo João, Apenas para testar paredes, pensar em como definir a posição das paredes de uma forma legal
+  context.arena.walls->push_front(generate_new_fruit_position(&context));
 
   bool should_quit = false;
   while (!should_quit)
