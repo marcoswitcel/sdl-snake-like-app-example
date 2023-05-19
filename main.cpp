@@ -67,7 +67,7 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   color.b = static_cast<uint8_t>(b);
   color.a = static_cast<uint8_t>(a);
 
-  printf("%d %d %d %d\n",r,g,b,a);
+  printf("%d %d %d %d\n", r, g, b, a);
 
   return true;
 
@@ -91,7 +91,7 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   trace("Número consumido e aplicado");
   number = local_number;
 
-  printf("%d %d %d %d\n",local_number);
+  printf("%d\n", local_number);
 }
 
 void load_ini_config()
