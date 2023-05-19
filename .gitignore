@@ -1,1 +1,5 @@
+# coisas da IDE
+.vscode
+
+# pasta dos executáveis
 target/*
