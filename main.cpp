@@ -92,6 +92,7 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   number = local_number;
 
   printf("%d\n", local_number);
+  return true;
 }
 
 void load_ini_config()
