@@ -37,3 +37,4 @@ Trabalho em progresso
 * [https://stackoverflow.com/questions/52955811/how-to-disable-enumeration-value-not-explicitly-handled-in-switch-just-for-one](https://stackoverflow.com/questions/52955811/how-to-disable-enumeration-value-not-explicitly-handled-in-switch-just-for-one)
 * [https://www.gnu.org/software/make/manual/make.html](https://www.gnu.org/software/make/manual/make.html)
 * [https://coolors.co/5b7b7a-232020-ff3c38-00ff2e](https://coolors.co/5b7b7a-232020-ff3c38-00ff2e)
+* [https://wiki.libsdl.org/SDL2/SDL_SetRenderDrawBlendMode](https://wiki.libsdl.org/SDL2/SDL_SetRenderDrawBlendMode)

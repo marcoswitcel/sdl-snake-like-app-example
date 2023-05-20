@@ -42,6 +42,7 @@ typedef struct Context_Data {
     .walls = new std::deque<Vec2<unsigned>>(),
     .fruits = new std::deque<Vec2<unsigned>>(),
   };
+  bool pointer_activated = false;
 } Context_Data;
 
 static Context_Data context = { };
@@ -240,6 +241,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
 #ifdef DEV_CODE_ENABLED
               case SDL_SCANCODE_R: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
+              case SDL_SCANCODE_T: { context->pointer_activated = !context->pointer_activated; } break;
 #endif
             }
           }
@@ -347,21 +349,24 @@ static inline SDL_Rect makeSquare(const Vec2<unsigned> &pos, unsigned arena_rect
 
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
 {
+  const unsigned arena_rect_size = context->arena.cell_size;  
+
   // Seta o fundo do renderer
   SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
-
   SDL_RenderClear(renderer);
 
-  constexpr unsigned rect_size = 50;
-  SDL_Rect rect = {
-    .x = (int) (context->mouse_x - rect_size/2), .y = (int) (context->mouse_y - rect_size/2),
-    .w = (int) rect_size, .h = (int) rect_size
-  };
+  // renderiza um quadrado na posição do mouse
+  if (context->pointer_activated)
+  {
+    SDL_Rect rect = {
+      .x = (int) ((context->mouse_x / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
+      .y = (int) ((context->mouse_y / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
+      .w = (int) arena_rect_size, .h = (int) arena_rect_size
+    };
 
-  SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, WHITE_COLOR.a);
-  SDL_RenderFillRect(renderer, &rect);
-
-  const unsigned arena_rect_size = context->arena.cell_size;  
+    SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, 100);
+    SDL_RenderFillRect(renderer, &rect);
+  }
 
   // Renderizando corpo
   unsigned i = 0;
@@ -458,6 +463,13 @@ int main(int argc, char **argv)
   {
     fprintf(stderr, "O Renderer SDL não pode inicializar corretamente: %s\n", SDL_GetError());
     return EXIT_FAILURE;
+  }
+
+  // setup e configurações do SDL_Renderer
+  // talvez existam motivos para por essa configuração dentro da função `render_scene`,
+  // mas por hora dessa forma atende as necessidades
+  {
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   }
 
   context.arena.fruits->push_front(generate_new_fruit_position(&context));
