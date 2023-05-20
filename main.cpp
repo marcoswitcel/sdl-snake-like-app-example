@@ -21,7 +21,7 @@ static unsigned TIMES_PER_SECOND = 4;
 static SDL_Color BG_COLOR    = { .r =  91, .g = 123, .b = 122, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =  46, .a = 255 };
 static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
-static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 }; // Trocar a cor?
+static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
