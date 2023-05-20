@@ -18,10 +18,10 @@ static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
 static unsigned TIMES_PER_SECOND = 4; 
-static SDL_Color BG_COLOR    = { .r = 255, .g =   0, .b =   0, .a = 255 };
-static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =   0, .a = 255 };
-static SDL_Color FRUIT_COLOR = { .r =   0, .g =   0, .b = 255, .a = 255 };
-static SDL_Color WALL_COLOR  = { .r = 100, .g = 100, .b = 100, .a = 255 }; // Trocar a cor?
+static SDL_Color BG_COLOR    = { .r =  91, .g = 123, .b = 122, .a = 255 };
+static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =  46, .a = 255 };
+static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
+static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 }; // Trocar a cor?
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
@@ -111,6 +111,7 @@ void load_ini_config()
   const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
   const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";
   const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";
+  const std::string WALL_COLOR_COMMAND = "WALL_COLOR";
   const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
   std::string line;
   while (std::getline(file_handle, line))
@@ -130,6 +131,7 @@ void load_ini_config()
       if (BACKGROUD_COLOR_COMMAND == command) { try_parse_and_apply_color(BG_COLOR, iss); }
       else if (SNAKE_COLOR_COMMAND == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
       else if (FRUIT_COLOR_COMMAND == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
+      else if (WALL_COLOR_COMMAND == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
     } else {
       trace("linha ignorada");
