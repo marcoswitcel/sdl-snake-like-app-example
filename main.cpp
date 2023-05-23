@@ -27,8 +27,11 @@ static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
 
 typedef struct Context_Data {
-  int32_t mouse_x;
-  int32_t mouse_y;
+  int32_t mouse_x = 0;
+  int32_t mouse_y = 0;
+  bool clicked = false;
+  int32_t last_clicked_x = 0;
+  int32_t last_clicked_y = 0;
   Snake_Dir snake_dir_input;
   Snake_Entity snake {
     .head = { .x = 3, .y = 5, },
@@ -188,7 +191,7 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
   return new_head_position;
 }
 
-bool is_next_snake_move_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
+bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
 {
   for (auto &it : *context->snake.body)
   {
@@ -215,6 +218,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
   SDL_Event event;
+  context->clicked = false;
   
   // Processa eventos
 #pragma GCC diagnostic push
@@ -247,6 +251,16 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
           }
         }
       } break;
+      case SDL_MOUSEBUTTONDOWN: {
+        trace("Mouse button down")
+        if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_PRESSED)
+        {
+          tracef("clicked: x%d, y%d\n", event.button.x, event.button.y);
+          context->clicked = true;
+          context->last_clicked_x = event.button.x;
+          context->last_clicked_y = event.button.y;
+        }
+      } break;
       case SDL_MOUSEMOTION: {
         tracef("motion: x%d, y%d\n", event.motion.x, event.motion.y);
         context->mouse_x = event.motion.x;
@@ -262,10 +276,33 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 
 void update(Context_Data *context)
 {
+  const unsigned arena_rect_size = context->arena.cell_size;
+
   // @todo João, ajustar para que não insira frutas dentro do corpo ou da posição atual da cabeça
   if (context->arena.fruits->size() == 0)
   {
     context->arena.fruits->push_front(generate_new_fruit_position(context));
+  }
+
+  if (context->clicked)
+  {
+    if (context->pointer_activated)
+    {
+      Vec2<unsigned> wall_position = {
+        .x = (int) (context->last_clicked_x / arena_rect_size),
+        .y = (int) (context->last_clicked_y / arena_rect_size),
+      };
+      if (is_next_position_valid(context, wall_position))
+      {
+        trace("parede adicionada");
+        context->arena.walls->push_front(wall_position);
+      }
+      else
+      {
+        trace("parede não adicionada, espaço ocupado");
+      }
+    }
+    context->clicked = false;
   }
 
   // Atualiza direção da cobrinha seguindo algumas restrições
@@ -300,7 +337,7 @@ void update(Context_Data *context)
 
   Snake_Entity &snake = context->snake;
   Vec2<unsigned> new_head_position = compute_next_snake_position(context);
-  bool is_heading_space_available = is_next_snake_move_valid(context, new_head_position);
+  bool is_heading_space_available = is_next_position_valid(context, new_head_position);
 
   if ((snake.dir == LEFT && snake.head.x == 0) ||
       (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
@@ -312,7 +349,7 @@ void update(Context_Data *context)
   context->snake.body->push_front(context->snake.head);
 
   #ifndef NO_TRACE
-    printf("body size: %ld", context->snake.body->size());
+    printf("body size: %ld\n", context->snake.body->size());
   #endif
 
   // Movimento e espaço restringido é garantido aqui
