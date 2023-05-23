@@ -281,7 +281,19 @@ void update(Context_Data *context)
   // @todo João, ajustar para que não insira frutas dentro do corpo ou da posição atual da cabeça
   if (context->arena.fruits->size() == 0)
   {
-    context->arena.fruits->push_front(generate_new_fruit_position(context));
+    // @todo João, acredito que não irá inserir frutas dentro de nenhum objeto,
+    // porém conforme os espaços forem acabando esse método se tornará cada vez
+    // mais custoso, ele está aqui só para deixar o gameplay inicial mais consistente
+    // até implementar um algorítmo mais interessante para gerar a nova posição aletatória
+    // sem precisar regerar a posição. 
+    Vec2<unsigned> fruit_position = generate_new_fruit_position(context);
+    while (!is_next_position_valid(context, fruit_position))
+    {
+      trace("[   >>>>> posição inválida regerando <<<<<<   ]");
+      fruit_position = generate_new_fruit_position(context);
+    }
+
+    context->arena.fruits->push_front(fruit_position);
   }
 
   if (context->clicked)
