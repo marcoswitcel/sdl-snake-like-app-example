@@ -1,18 +1,14 @@
 #include "./dev-utils.h"
 
-
+// @note O símbolo NO_TRACE controla a emissão de logs para o stdout
 
 #ifdef NO_TRACE
   #define trace(message) ((void)0);
   #define tracef(message) ((void)0);
+  #define trace_timed(message) ((void)0);
 #else
   #define trace(message) printf("[%s:%d] %s\n", __FILE__, __LINE__, message);
   #define tracef(...) (printf("[%s:%d] ", __FILE__, __LINE__), printf(__VA_ARGS__), printf("\n"));
-#endif
-
-#ifdef NO_TRACE
-  #define trace_timed(message) ((void)0);
-#else
   #define trace_timed(message) log_trace(__FILE__, __LINE__, message);
 #endif
 
