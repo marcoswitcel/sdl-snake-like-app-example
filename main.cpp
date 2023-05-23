@@ -248,7 +248,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
         }
       } break;
       case SDL_MOUSEMOTION: {
-        printf("motion: x%d, y%d\n", event.motion.x, event.motion.y);
+        tracef("motion: x%d, y%d\n", event.motion.x, event.motion.y);
         context->mouse_x = event.motion.x;
         context->mouse_y = event.motion.y;
       } break;
@@ -355,19 +355,6 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
   SDL_RenderClear(renderer);
 
-  // renderiza um quadrado na posição do mouse
-  if (context->pointer_activated)
-  {
-    SDL_Rect rect = {
-      .x = (int) ((context->mouse_x / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
-      .y = (int) ((context->mouse_y / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
-      .w = (int) arena_rect_size, .h = (int) arena_rect_size
-    };
-
-    SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, 100);
-    SDL_RenderFillRect(renderer, &rect);
-  }
-
   // Renderizando corpo
   unsigned i = 0;
   for (auto &ref : *context->snake.body)
@@ -407,6 +394,19 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
     SDL_SetRenderDrawColor(renderer, WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a);
     SDL_RenderFillRect(renderer, &fruit_rect);
+  }
+
+  // renderiza um quadrado na posição do mouse
+  if (context->pointer_activated)
+  {
+    SDL_Rect rect = {
+      .x = (int) ((context->mouse_x / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
+      .y = (int) ((context->mouse_y / arena_rect_size) * arena_rect_size), // isso só funciona por a divisão faz com que a parte fracionária seja perdida
+      .w = (int) arena_rect_size, .h = (int) arena_rect_size
+    };
+
+    SDL_SetRenderDrawColor(renderer, WHITE_COLOR.r, WHITE_COLOR.g, WHITE_COLOR.b, 50);
+    SDL_RenderFillRect(renderer, &rect);
   }
 
   // Faz o swap do backbuffer com o buffer da tela?

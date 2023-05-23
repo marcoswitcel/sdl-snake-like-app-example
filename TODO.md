@@ -17,3 +17,4 @@
 * trocar para g++ -- ok
 * ajustar para copiar sample de configurações
 * ajustar argumentos do compilador -- ok
+* realizar algumas das melhorias anotadas: melhorar o processo de adição que gera a nova fruta no mapa
