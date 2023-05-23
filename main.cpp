@@ -301,8 +301,8 @@ void update(Context_Data *context)
     if (context->pointer_activated)
     {
       Vec2<unsigned> wall_position = {
-        .x = (int) (context->last_clicked_x / arena_rect_size),
-        .y = (int) (context->last_clicked_y / arena_rect_size),
+        .x = context->last_clicked_x / arena_rect_size,
+        .y = context->last_clicked_y / arena_rect_size,
       };
       if (is_next_position_valid(context, wall_position))
       {
