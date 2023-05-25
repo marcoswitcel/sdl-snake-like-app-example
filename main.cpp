@@ -73,7 +73,7 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   color.b = static_cast<uint8_t>(b);
   color.a = static_cast<uint8_t>(a);
 
-  printf("%d %d %d %d\n", r, g, b, a);
+  tracef("%d %d %d %d", r, g, b, a);
 
   return true;
 
@@ -97,7 +97,7 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   trace("Número consumido e aplicado");
   number = local_number;
 
-  printf("%d\n", local_number);
+  tracef("%d", local_number);
   return true;
 }
 
@@ -226,7 +226,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   while (SDL_PollEvent(&event))
   {
     trace("Processando evento:");
-    printf("%d\n", event.type);
+    tracef("%d", event.type);
     switch (event.type)
     {
       case SDL_QUIT: *should_quit = true; break;
@@ -252,17 +252,17 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
         }
       } break;
       case SDL_MOUSEBUTTONDOWN: {
-        trace("Mouse button down")
+        trace("Mouse button down");
         if (event.button.button == SDL_BUTTON_LEFT && event.button.state == SDL_PRESSED)
         {
-          tracef("clicked: x%d, y%d\n", event.button.x, event.button.y);
+          tracef("clicked: x %d, y %d", event.button.x, event.button.y);
           context->clicked = true;
           context->last_clicked_x = event.button.x;
           context->last_clicked_y = event.button.y;
         }
       } break;
       case SDL_MOUSEMOTION: {
-        tracef("motion: x%d, y%d\n", event.motion.x, event.motion.y);
+        tracef("motion: x %d, y %d", event.motion.x, event.motion.y);
         context->mouse_x = event.motion.x;
         context->mouse_y = event.motion.y;
       } break;
@@ -361,7 +361,7 @@ void update(Context_Data *context)
   context->snake.body->push_front(context->snake.head);
 
   #ifndef NO_TRACE
-    printf("body size: %ld\n", context->snake.body->size());
+    tracef("body size: %ld", context->snake.body->size());
   #endif
 
   // Movimento e espaço restringido é garantido aqui
