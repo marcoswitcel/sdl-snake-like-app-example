@@ -18,3 +18,4 @@
 * ajustar para copiar sample de configurações
 * ajustar argumentos do compilador -- ok
 * realizar algumas das melhorias anotadas: melhorar o processo de adição que gera a nova fruta no mapa
+* desenvolver mecanismo que permita exportar e importar uma configuração de level, definir o formato e os comandos

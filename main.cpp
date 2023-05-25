@@ -214,6 +214,26 @@ bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_hea
   return true;
 }
 
+bool export_current_arena_layout(Context_Data *context)
+{
+  // @todo João, terminar aqui
+  // falta decidir como exportar a posição de começo do jogador
+  // falta decidir se vai adicionar condições de vitórios
+  // falta organizar em que arquivo, com que nome vai exportar
+  std::stringstream stream;
+
+  stream << "==== Demarcador temporário - Início ====\n";
+
+  // Exportando paredes
+  for (auto &it : *context->arena.walls)
+  {
+    stream << "wall " << it.x << " " << it.y << "\n";
+  }
+
+  stream << "==== Demarcador temporário - Fim ====\n";
+  trace(stream.str().c_str());
+}
+
 void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
@@ -244,6 +264,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
 #ifdef DEV_CODE_ENABLED
+              case SDL_SCANCODE_E: { export_current_arena_layout(context); } break;
               case SDL_SCANCODE_R: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
               case SDL_SCANCODE_T: { context->pointer_activated = !context->pointer_activated; } break;
 #endif
