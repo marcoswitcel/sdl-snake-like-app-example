@@ -22,6 +22,7 @@ static SDL_Color BG_COLOR    = { .r =  91, .g = 123, .b = 122, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =  46, .a = 255 };
 static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
 static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
+static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
@@ -34,7 +35,7 @@ typedef struct Context_Data {
   int32_t last_clicked_y = 0;
   Snake_Dir snake_dir_input;
   Snake_Entity snake {
-    .head = { .x = 3, .y = 5, },
+    .head = SNAKE_START_POSITION,
     .dir = NONE,
     .body = new std::deque<Vec2<unsigned>>(),
   };
@@ -83,6 +84,31 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   }
 }
 
+bool try_parse_and_apply_vec2(Vec2<unsigned> &position, std::istringstream &iss)
+{
+  trace("Tentando parsear cores");
+  int x, y;
+
+  iss >> x;
+  if (iss.fail() || x > SDL_MAX_UINT8) goto fail;
+  
+  iss >> y;
+  if (iss.fail() || y > SDL_MAX_UINT8) goto fail;
+  
+  trace("Vec2 consumido e aplicado");
+  position.x = static_cast<uint8_t>(x);
+  position.y = static_cast<uint8_t>(y);
+
+  tracef("%d %d", x, y);
+
+  return true;
+
+  fail: {
+    trace("Não conseguiu aplicar o Vec2");
+    return false;
+  }
+}
+
 bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
 {
   trace("Tentando parsear número");
@@ -101,6 +127,17 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   return true;
 }
 
+void reset_arena(Context_Data *context)
+{
+  context->snake_dir_input = NONE;
+  context->snake.dir = NONE;
+  context->snake.head = SNAKE_START_POSITION;
+  context->snake.body->clear();
+
+  context->arena.fruits->clear();
+  context->arena.walls->clear();
+}
+
 void load_ini_config()
 {
   trace("Checando config.ini");
@@ -117,6 +154,7 @@ void load_ini_config()
   const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";
   const std::string WALL_COLOR_COMMAND = "WALL_COLOR";
   const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
+  const std::string SNAKE_START_POSITION_COMMAND = "SNAKE_START_POSITION";
   std::string line;
   while (std::getline(file_handle, line))
   {
@@ -137,6 +175,7 @@ void load_ini_config()
       else if (FRUIT_COLOR_COMMAND == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
       else if (WALL_COLOR_COMMAND == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
+      else if (SNAKE_START_POSITION_COMMAND == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
     } else {
       trace("linha ignorada");
     }
@@ -275,6 +314,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
 #ifdef DEV_CODE_ENABLED
+              case SDL_SCANCODE_R: { reset_arena(context); } break;
               case SDL_SCANCODE_E: { export_current_arena_layout(context); } break;
               case SDL_SCANCODE_L: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
               case SDL_SCANCODE_T: { context->pointer_activated = !context->pointer_activated; } break;
@@ -550,6 +590,7 @@ int main(int argc, char **argv)
   // talvez existam motivos para por essa configuração dentro da função `render_scene`,
   // mas por hora dessa forma atende as necessidades
   {
+    reset_arena(&context);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   }
 
