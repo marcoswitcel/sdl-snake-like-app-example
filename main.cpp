@@ -222,7 +222,7 @@ bool export_current_arena_layout(Context_Data *context)
   // falta organizar em que arquivo, com que nome vai exportar
   std::stringstream stream;
 
-  stream << "==== Demarcador temporário - Início ====\n";
+  stream << "# Arquivo gerado pelo jogo\n";
 
   // Exportando paredes
   for (auto &it : *context->arena.walls)
@@ -230,10 +230,19 @@ bool export_current_arena_layout(Context_Data *context)
     stream << "wall " << it.x << " " << it.y << "\n";
   }
 
-  stream << "==== Demarcador temporário - Fim ====\n";
-  trace(stream.str().c_str());
+  trace("Abrindo arquivo \"level_output.lvl\"para escrita");
+  std::ofstream level_file("level_output.lvl", std::ios::binary);
 
-  return false;
+  if (level_file.bad()) {
+    trace("-- arquivo não aberto");
+    return false;
+  }
+
+  level_file << stream.str();
+
+  level_file.close();
+
+  return true;
 }
 
 void handle_events_and_inputs(Context_Data *context, bool *should_quit)
