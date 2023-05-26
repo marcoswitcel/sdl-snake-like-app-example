@@ -544,10 +544,6 @@ int main(int argc, char **argv)
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
   }
 
-  context.arena.fruits->push_front(generate_new_fruit_position(&context));
-  // @todo João, Apenas para testar paredes, pensar em como definir a posição das paredes de uma forma legal
-  context.arena.walls->push_front(generate_new_fruit_position(&context));
-
   bool should_quit = false;
   while (!should_quit)
   {
