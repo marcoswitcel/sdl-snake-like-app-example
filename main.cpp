@@ -232,6 +232,8 @@ bool export_current_arena_layout(Context_Data *context)
 
   stream << "==== Demarcador temporário - Fim ====\n";
   trace(stream.str().c_str());
+
+  return false;
 }
 
 void handle_events_and_inputs(Context_Data *context, bool *should_quit)
