@@ -276,7 +276,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
 #ifdef DEV_CODE_ENABLED
               case SDL_SCANCODE_E: { export_current_arena_layout(context); } break;
-              case SDL_SCANCODE_R: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
+              case SDL_SCANCODE_L: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
               case SDL_SCANCODE_T: { context->pointer_activated = !context->pointer_activated; } break;
 #endif
             }
