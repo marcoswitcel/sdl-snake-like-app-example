@@ -22,6 +22,7 @@ static SDL_Color BG_COLOR    = { .r =  91, .g = 123, .b = 122, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =  46, .a = 255 };
 static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
 static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
+static std::deque<Vec2<unsigned>> CURRENT_DEFAULT_WALLS = std::deque<Vec2<unsigned>>();
 static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
 
 // Cores
@@ -109,6 +110,18 @@ bool try_parse_and_apply_vec2(Vec2<unsigned> &position, std::istringstream &iss)
   }
 }
 
+bool try_parse_and_add_wall(std::istringstream &iss)
+{
+  Vec2<unsigned> position;
+
+  if (try_parse_and_apply_vec2(position, iss)) {
+    CURRENT_DEFAULT_WALLS.push_back(position);
+    return true;
+  }
+
+  return false;
+}
+
 bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
 {
   trace("Tentando parsear número");
@@ -136,6 +149,10 @@ void reset_arena(Context_Data *context)
 
   context->arena.fruits->clear();
   context->arena.walls->clear();
+  for (auto &it : CURRENT_DEFAULT_WALLS)
+  {
+    context->arena.walls->push_back(it);
+  }
 }
 
 void load_ini_config()
@@ -149,13 +166,22 @@ void load_ini_config()
     trace("-- arquivo não encontrado, configurações padrão apenas")
     return;
   }
+
+  // @todo João, precisamos de uma etapa dedicada a resetar os campos para o valor padrão
+  // abaixom adicione um comando que resta uma das estruturas para o valor padrão, o mesmo
+  // deve ser feito para cores e outros
+  {
+    CURRENT_DEFAULT_WALLS.clear();
+  }
+
+
   const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
   const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";
   const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";
   const std::string WALL_COLOR_COMMAND = "WALL_COLOR";
   const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
   const std::string SNAKE_START_POSITION_COMMAND = "SNAKE_START_POSITION";
-  const std::string ADD_WALL_COMMAND = "ADD_WALL_COMMAND";
+  const std::string ADD_WALL_COMMAND = "ADD_WALL";
   std::string line;
   while (std::getline(file_handle, line))
   {
@@ -177,7 +203,7 @@ void load_ini_config()
       else if (WALL_COLOR_COMMAND == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (SNAKE_START_POSITION_COMMAND == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
-      else if (ADD_WALL_COMMAND == command) { trace("encontrado wall"); }
+      else if (ADD_WALL_COMMAND == command) { try_parse_and_add_wall(iss); }
     } else {
       trace("linha ignorada");
     }
