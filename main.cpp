@@ -155,6 +155,7 @@ void load_ini_config()
   const std::string WALL_COLOR_COMMAND = "WALL_COLOR";
   const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
   const std::string SNAKE_START_POSITION_COMMAND = "SNAKE_START_POSITION";
+  const std::string ADD_WALL_COMMAND = "ADD_WALL_COMMAND";
   std::string line;
   while (std::getline(file_handle, line))
   {
@@ -176,6 +177,7 @@ void load_ini_config()
       else if (WALL_COLOR_COMMAND == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (SNAKE_START_POSITION_COMMAND == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
+      else if (ADD_WALL_COMMAND == command) { trace("encontrado wall"); }
     } else {
       trace("linha ignorada");
     }
