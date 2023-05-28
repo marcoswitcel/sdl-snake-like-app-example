@@ -30,6 +30,12 @@ static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
 
+typedef enum Game_State {
+  PAUSED,
+  RUNNING,
+  MENU
+} Game_State;
+
 typedef struct Context_Data {
   int32_t mouse_x = 0;
   int32_t mouse_y = 0;
@@ -50,6 +56,7 @@ typedef struct Context_Data {
     .fruits = new std::deque<Vec2<unsigned>>(),
   };
   bool pointer_activated = false;
+  Game_State state = RUNNING;
 } Context_Data;
 
 static Context_Data context = { };
@@ -140,6 +147,18 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
 
   tracef("%d", local_number);
   return true;
+}
+
+void toggle_pause_play(Context_Data *context)
+{
+  if (context->state == RUNNING) 
+  {
+    context->state = PAUSED;
+  }
+  else if (context->state == PAUSED) 
+  {
+    context->state = RUNNING;
+  }
 }
 
 void reset_arena(Context_Data *context)
@@ -336,6 +355,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
 #ifdef DEV_CODE_ENABLED
+              case SDL_SCANCODE_P: { toggle_pause_play(context); } break;
               case SDL_SCANCODE_R: { reset_arena(context); } break;
               case SDL_SCANCODE_E: { export_current_arena_layout(context); } break;
               case SDL_SCANCODE_L: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
@@ -410,6 +430,8 @@ void update(Context_Data *context)
     }
     context->clicked = false;
   }
+
+  if (context->state == PAUSED) return;
 
   // Atualiza direção da cobrinha seguindo algumas restrições
   switch (context->snake_dir_input)
