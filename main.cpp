@@ -9,7 +9,9 @@
 #include <SDL2/SDL.h>
 
 #include "./dev-utils.c"
+#include "./export-level.cpp"
 #include "./snake.c"
+
 
 static constexpr int CELL_SIZE = 20;
 static constexpr int ARENA_WIDTH = 30;
