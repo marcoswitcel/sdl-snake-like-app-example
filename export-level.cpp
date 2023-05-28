@@ -22,7 +22,7 @@ static const char* const level_command_names[] = {
 #undef MAKE_STRING_ENTRY
 };
 
-inline const char* const get_name(Level_Command command)
+inline const char* get_name(Level_Command command)
 {
     return level_command_names[command];
 }
