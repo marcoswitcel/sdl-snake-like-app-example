@@ -21,3 +21,8 @@ static const char* const level_command_names[] = {
     LEVEL_COMMAND_LIST(MAKE_STRING_ENTRY)
 #undef MAKE_STRING_ENTRY
 };
+
+inline const char* const get_name(Level_Command command)
+{
+    return level_command_names[command];
+}

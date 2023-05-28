@@ -176,14 +176,6 @@ void load_ini_config()
     CURRENT_DEFAULT_WALLS.clear();
   }
 
-
-  const std::string BACKGROUD_COLOR_COMMAND = "BACKGROUND_COLOR";  
-  const std::string SNAKE_COLOR_COMMAND = "SNAKE_COLOR";
-  const std::string FRUIT_COLOR_COMMAND = "FRUIT_COLOR";
-  const std::string WALL_COLOR_COMMAND = "WALL_COLOR";
-  const std::string SNAKE_ARENA_TICK_COMMAND = "SNAKE_ARENA_TICK";
-  const std::string SNAKE_START_POSITION_COMMAND = "SNAKE_START_POSITION";
-  const std::string ADD_WALL_COMMAND = "ADD_WALL";
   std::string line;
   while (std::getline(file_handle, line))
   {
@@ -199,13 +191,13 @@ void load_ini_config()
       trace(command.c_str());
 
       // @todo João, finalizar, mais comandos aqui
-      if (BACKGROUD_COLOR_COMMAND == command) { try_parse_and_apply_color(BG_COLOR, iss); }
-      else if (SNAKE_COLOR_COMMAND == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
-      else if (FRUIT_COLOR_COMMAND == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
-      else if (WALL_COLOR_COMMAND == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
-      else if (SNAKE_ARENA_TICK_COMMAND == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
-      else if (SNAKE_START_POSITION_COMMAND == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
-      else if (ADD_WALL_COMMAND == command) { try_parse_and_add_wall(iss); }
+      if (get_name(BACKGROUD_COLOR_COMMAND) == command) { try_parse_and_apply_color(BG_COLOR, iss); }
+      else if (get_name(SNAKE_COLOR_COMMAND) == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
+      else if (get_name(FRUIT_COLOR_COMMAND) == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
+      else if (get_name(WALL_COLOR_COMMAND) == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
+      else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
+      else if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
+      else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
     } else {
       trace("linha ignorada");
     }
@@ -296,7 +288,7 @@ bool export_current_arena_layout(Context_Data *context)
   // Exportando paredes
   for (auto &it : *context->arena.walls)
   {
-    stream << "wall " << it.x << " " << it.y << "\n";
+    stream << get_name(ADD_WALL_COMMAND) << " " << it.x << " " << it.y << "\n";
   }
 
   trace("Abrindo arquivo \"level_output.lvl\"para escrita");
