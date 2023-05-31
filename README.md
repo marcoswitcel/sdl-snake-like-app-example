@@ -3,6 +3,15 @@
 Trabalho em progresso
 
 
+## Instalando dependências no Ubuntu
+
+```bash
+# lib sdl de dev
+sudo apt-get install -y libsdl2-dev
+# extensão de TTF
+sudo apt-get install -y libsdl2-ttf-dev
+```
+
 ## Referências
 
 * [https://en.wikibooks.org/wiki/SDL_(Simple_DirectMedia_Layer)/Basics](https://en.wikibooks.org/wiki/SDL_(Simple_DirectMedia_Layer)/Basics)
@@ -42,3 +51,5 @@ Trabalho em progresso
 * [https://wiki.libsdl.org/SDL2/SDL_MouseButtonEvent](https://wiki.libsdl.org/SDL2/SDL_MouseButtonEvent)
 * [https://stackoverflow.com/questions/2462951/c-equivalent-of-stringbuffer-stringbuilder](https://stackoverflow.com/questions/2462951/c-equivalent-of-stringbuffer-stringbuilder)
 * [https://stackoverflow.com/questions/201593/is-there-a-simple-way-to-convert-c-enum-to-string](https://stackoverflow.com/questions/201593/is-there-a-simple-way-to-convert-c-enum-to-string)
+* [https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2](https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2)
+* [https://stackoverflow.com/questions/40368368/sdl2-ttf-on-ubuntu-usr-bin-ld-cannot-find-lsdl2-ttf](https://stackoverflow.com/questions/40368368/sdl2-ttf-on-ubuntu-usr-bin-ld-cannot-find-lsdl2-ttf)
