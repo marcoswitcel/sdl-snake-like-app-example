@@ -54,3 +54,4 @@ sudo apt-get install -y libsdl2-ttf-dev
 * [https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2](https://stackoverflow.com/questions/22886500/how-to-render-text-in-sdl2)
 * [https://stackoverflow.com/questions/40368368/sdl2-ttf-on-ubuntu-usr-bin-ld-cannot-find-lsdl2-ttf](https://stackoverflow.com/questions/40368368/sdl2-ttf-on-ubuntu-usr-bin-ld-cannot-find-lsdl2-ttf)
 * [https://thenumb.at/cpp-course/sdl2/07/07.html](https://thenumb.at/cpp-course/sdl2/07/07.html)
+* [https://fonts.google.com/](https://fonts.google.com/)
