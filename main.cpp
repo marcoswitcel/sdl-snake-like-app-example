@@ -29,6 +29,9 @@ static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
 static std::deque<Vec2<unsigned>> CURRENT_DEFAULT_WALLS = std::deque<Vec2<unsigned>>();
 static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
 
+// Fontes
+TTF_Font *default_font = NULL;
+
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
 
@@ -632,6 +635,18 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
+  if (TTF_Init() < 0)
+  {
+    fprintf(stderr, "A extensão TTF do SDL não pode inicializar corretamente: %s\n", TTF_GetError());
+  }
+
+  // @note Pode ser nulla por enquanto
+  default_font = TTF_OpenFont("Font-Que-Nao-Existe.ttf", 24);
+  if (default_font == NULL)
+  {
+    trace(">>> A fonte não pode ser carregada <<<");
+  }
+
   // setup e configurações do SDL_Renderer
   // talvez existam motivos para por essa configuração dentro da função `render_scene`,
   // mas por hora dessa forma atende as necessidades
@@ -661,10 +676,18 @@ int main(int argc, char **argv)
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
   // SDL_Delay(5 * 1000);
 
+  if (default_font)
+  {
+    trace("Fonte liberada");
+    TTF_CloseFont(default_font);
+  }
+  TTF_Quit();
+  trace("Extensão de fontes encerrada");
+
   // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
   SDL_DestroyWindow(window);
   SDL_Quit();
-
+  trace("Aplicação encerrada com sucesso");
 
   return EXIT_SUCCESS;
 }
