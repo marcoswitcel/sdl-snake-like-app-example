@@ -589,7 +589,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     SDL_Color text_color = { 255, 255, 255, 255, };
     SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, message_buffer, text_color);
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
-    SDL_Rect    target_area = { .x = 0, .y = 0, .w = 100, .h = 100, };
+    SDL_Rect    target_area = { .x = 4, .y = 0, .w = 140, .h = 30, };
     SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
 
     SDL_FreeSurface(text_area_surface);
@@ -658,7 +658,7 @@ int main(int argc, char **argv)
   }
 
   // @note Pode ser nulla por enquanto
-  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-SemiBold.ttf", 18);
+  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-Medium.ttf", 28);
 
   if (default_font == NULL)
   {
