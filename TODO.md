@@ -11,15 +11,15 @@
 * remover frutas comidas -- ok
 * adicionar mais frutas -- parcialmente feito, ele permite adicionar frutas aonde já existe corpo da cobrinha e na cabeça também.
 * limitar os movimentos -- ok
+* trocar para g++ -- ok
+* como vou renderizar textos? -- ok
+* ajustar argumentos do compilador -- ok
 * criar perfis de cores? para a renderização do mapa
 * adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
-* adicionar paredes e talvez outros tipos de obstáculos
-* trocar para g++ -- ok
 * ajustar para copiar sample de configurações
-* ajustar argumentos do compilador -- ok
+* adicionar paredes e talvez outros tipos de obstáculos
 * realizar algumas das melhorias anotadas: melhorar o processo de adição que gera a nova fruta no mapa
 * desenvolver mecanismo que permita exportar e importar uma configuração de level, definir o formato e os comandos
-* como vou renderizar textos?
 * Achar asset de som ou gerar som simples
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
