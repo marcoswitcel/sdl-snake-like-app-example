@@ -581,11 +581,13 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   if (default_font)
   {
+    char message_buffer[20];
+    sprintf(message_buffer, "Pontos: %ld", context->snake.body->size());
     // @note João, esse processo é ineficiente, porém, por hora serve para testar
     // @todo Organizar um meio de lidar com texto e atualizar apenas quando a string muda, fazer um hash simples?
     // ou criar uma estrutura com flag `needs_update`?
-    SDL_Color text_color = { 255, 255, 255, };
-    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, "Pontos: 0", text_color);
+    SDL_Color text_color = { 255, 255, 255, 255, };
+    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, message_buffer, text_color);
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect    target_area = { .x = 0, .y = 0, .w = 100, .h = 100, };
     SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
@@ -656,7 +658,7 @@ int main(int argc, char **argv)
   }
 
   // @note Pode ser nulla por enquanto
-  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-SemiBold.ttf", 24);
+  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-SemiBold.ttf", 18);
 
   if (default_font == NULL)
   {
