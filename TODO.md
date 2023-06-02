@@ -23,4 +23,4 @@
 * Achar asset de som ou gerar som simples
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
-* Escolher uma fonte legal para os textos no google fontes
+* Escolher uma fonte legal para os textos no google fontes ([https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn](https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn))
