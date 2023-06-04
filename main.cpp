@@ -400,7 +400,6 @@ void update(Context_Data *context)
 {
   const unsigned arena_rect_size = context->arena.cell_size;
 
-  // @todo João, ajustar para que não insira frutas dentro do corpo ou da posição atual da cabeça
   if (context->arena.fruits->size() == 0)
   {
     // @todo João, acredito que não irá inserir frutas dentro de nenhum objeto,
