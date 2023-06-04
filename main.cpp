@@ -31,6 +31,7 @@ static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
 
 // Fontes
 TTF_Font *default_font = NULL;
+SDL_Color default_text_color = { 255, 255, 255, 255, };
 
 // Cores
 static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
@@ -38,7 +39,8 @@ static const SDL_Color WHITE_COLOR = { .r = 255, .g = 255, .b = 255, .a = 255 };
 typedef enum Game_State {
   PAUSED,
   RUNNING,
-  MENU
+  MENU,
+  GAME_OVER,
 } Game_State;
 
 typedef struct Context_Data {
@@ -168,12 +170,18 @@ void toggle_pause_play(Context_Data *context)
 
 void reset_arena(Context_Data *context)
 {
+  context->state = RUNNING;
+
+  // Esse é o estado da cobrinha quando inicia o nível
   context->snake_dir_input = NONE;
   context->snake.dir = NONE;
   context->snake.head = SNAKE_START_POSITION;
   context->snake.body->clear();
 
+  // a lista de frutas inicia vazia
   context->arena.fruits->clear();
+
+  // As paredes são copiadas da lista de paredes padrão para o level que está sendo executado
   context->arena.walls->clear();
   for (auto &it : CURRENT_DEFAULT_WALLS)
   {
@@ -438,7 +446,7 @@ void update(Context_Data *context)
     context->clicked = false;
   }
 
-  if (context->state == PAUSED) return;
+  if (context->state == PAUSED || context->state == GAME_OVER) return;
 
   // Atualiza direção da cobrinha seguindo algumas restrições
   switch (context->snake_dir_input)
@@ -478,7 +486,14 @@ void update(Context_Data *context)
       (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
       (snake.dir == UP && snake.head.y == 0) ||
       (snake.dir == DOWN && snake.head.y == context->arena.height - 1)||
-      !is_heading_space_available) return;
+      !is_heading_space_available)
+  {
+    if (snake.dir != NONE)
+    {
+      context->state = GAME_OVER;
+    }
+    return;
+  }
 
   // Salva última localização da head
   context->snake.body->push_front(context->snake.head);
@@ -588,14 +603,21 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     // @note João, esse processo é ineficiente, porém, por hora serve para testar
     // @todo Organizar um meio de lidar com texto e atualizar apenas quando a string muda, fazer um hash simples?
     // ou criar uma estrutura com flag `needs_update`?
-    SDL_Color text_color = { 255, 255, 255, 255, };
-    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, message_buffer, text_color);
+    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, message_buffer, default_text_color);
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect    target_area = { .x = 4, .y = 0, .w = 140, .h = 30, };
     SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
 
     SDL_FreeSurface(text_area_surface);
     SDL_DestroyTexture(text_area_texture);
+  }
+
+  if (default_font && context->state == GAME_OVER)
+  {
+    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, "Fim do jogo", default_text_color);
+    SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
+    SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
+    SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
   }
 
   // Faz o swap do backbuffer com o buffer da tela?
