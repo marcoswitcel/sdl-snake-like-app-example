@@ -14,6 +14,7 @@
 * trocar para g++ -- ok
 * como vou renderizar textos? -- ok
 * ajustar argumentos do compilador -- ok
+* Escolher uma fonte legal para os textos no google fontes ([https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn](https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn)) -- ok
 * criar perfis de cores? para a renderização do mapa
 * adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
 * ajustar para copiar sample de configurações
@@ -23,4 +24,3 @@
 * Achar asset de som ou gerar som simples
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
-* Escolher uma fonte legal para os textos no google fontes ([https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn](https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn))
