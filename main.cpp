@@ -278,6 +278,9 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
 
 bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
 {
+  auto head = context->snake.head;
+  if (new_head_position.x == head.x && new_head_position.y == head.y) return false;
+  
   for (auto &it : *context->snake.body)
   {
     if (it.x == new_head_position.x && it.y == new_head_position.y)
