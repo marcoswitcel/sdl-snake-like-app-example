@@ -614,6 +614,14 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   if (default_font && context->state == GAME_OVER)
   {
+    // Cobre toda a imagem com uma sobreposição preta com transparência
+    {
+      SDL_Rect overlay = { .x = 0, .y = 0, .w = WIDTH, .h = HEIGHT, };
+      SDL_Color overlay_color = { 0, 0, 0, 160, };
+      SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+      SDL_RenderFillRect(renderer, &overlay);
+    }
+
     SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, "Fim do jogo", default_text_color);
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
