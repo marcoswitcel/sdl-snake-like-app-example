@@ -21,6 +21,7 @@ static constexpr int ARENA_HEIGHT = 30;
 static constexpr int WIDTH = CELL_SIZE * ARENA_WIDTH;
 static constexpr int HEIGHT = CELL_SIZE * ARENA_HEIGHT;
 
+static unsigned UI_TICKS_PER_SECOND = 30; 
 static unsigned TIMES_PER_SECOND = 4; 
 static SDL_Color BG_COLOR    = { .r =  91, .g = 123, .b = 122, .a = 255 };
 static SDL_Color SNAKE_COLOR = { .r =   0, .g = 255, .b =  46, .a = 255 };
@@ -223,11 +224,13 @@ void load_ini_config()
       trace(command.c_str());
 
       // @todo João, finalizar, mais comandos aqui
+      // @todo João, sanitizar os valores lidos para `TIMES_PER_SECOND` e `TIMES_PER_SECOND`
       if (get_name(BACKGROUD_COLOR_COMMAND) == command) { try_parse_and_apply_color(BG_COLOR, iss); }
       else if (get_name(SNAKE_COLOR_COMMAND) == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
       else if (get_name(FRUIT_COLOR_COMMAND) == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
       else if (get_name(WALL_COLOR_COMMAND) == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
+      else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
       else if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
       else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
     } else {
@@ -740,7 +743,7 @@ int main(int argc, char **argv)
     render_scene(renderer, &context);
     
     // @note Solução temporária para mirar em atualizar 60 vezes por segundo
-    SDL_Delay(1000 / 60);
+    SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
 
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
