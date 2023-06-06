@@ -287,7 +287,7 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
   return new_head_position;
 }
 
-bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_head_position)
+bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_head_position, bool include_fruits = false)
 {
   auto head = context->snake.head;
   if (new_head_position.x == head.x && new_head_position.y == head.y) return false;
@@ -307,6 +307,17 @@ bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_hea
     if (it.x == new_head_position.x && it.y == new_head_position.y)
     {
       return false;
+    }
+  }
+
+  if (include_fruits)
+  {
+    for (auto &it : *context->arena.fruits)
+    {
+      if (it.x == new_head_position.x && it.y == new_head_position.y)
+      {
+        return false;
+      }
     }
   }
 
@@ -443,7 +454,7 @@ void update(Context_Data *context)
         .x = context->last_clicked_x / arena_rect_size,
         .y = context->last_clicked_y / arena_rect_size,
       };
-      if (is_next_position_valid(context, wall_position))
+      if (is_next_position_valid(context, wall_position, true))
       {
         trace("parede adicionada");
         context->arena.walls->push_front(wall_position);
