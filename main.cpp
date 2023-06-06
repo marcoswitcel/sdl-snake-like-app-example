@@ -345,7 +345,9 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
   SDL_Event event;
-  context->clicked = false;
+  // @todo João, por hora apenas a função `update` tá consumindo esse valor, por isso ela reseta o valor para false
+  // quando faz uso.
+  //context->clicked = false;
   
   // Processa eventos
 #pragma GCC diagnostic push
@@ -401,7 +403,12 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 #pragma GCC diagnostic pop
 
   // Processa inputs
-  context->snake_dir_input = snake_dir;
+  // @note Por hora como a UI atualiza mais que lógica do jogo estou considerando que o não input `NONE`
+  // simboliza que não teve input nesse tick e o valor antigo do input deve ser mantido
+  if (snake_dir != NONE)
+  {
+    context->snake_dir_input = snake_dir;
+  }
 }
 
 void update(Context_Data *context)
@@ -706,6 +713,8 @@ int main(int argc, char **argv)
   }
 
   bool should_quit = false;
+  uint32_t last_timestamp = 0;
+  uint32_t accumulated_time = 0;
   while (!should_quit)
   {
     trace_timed("Entrando no loop");
@@ -713,14 +722,25 @@ int main(int argc, char **argv)
     // Processa eventos e inputs
     handle_events_and_inputs(&context, &should_quit);
 
-    // Lógica de atualização
-    update(&context);
+    {
+      uint32_t current_timestamp = SDL_GetTicks();
+
+      accumulated_time += current_timestamp - last_timestamp;
+      last_timestamp = current_timestamp;
+
+      if (accumulated_time > (1000 / TIMES_PER_SECOND))
+      {
+        accumulated_time = 0;
+        // Lógica de atualização do jogo (regras)
+        update(&context);
+      }
+    }
    
     // Renderiza
     render_scene(renderer, &context);
-
-    // @note Solução temporária para aliviar a CPU e manter a lógica rodando na velocidade certa
-    SDL_Delay(1000 / TIMES_PER_SECOND);
+    
+    // @note Solução temporária para mirar em atualizar 60 vezes por segundo
+    SDL_Delay(1000 / 60);
   }
 
   // Se chegar até aqui vai deixar a janela aberta por 5 segundos
