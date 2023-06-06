@@ -57,3 +57,4 @@ sudo apt-get install -y libsdl2-ttf-dev
 * [https://fonts.google.com/](https://fonts.google.com/)
 * [https://stackoverflow.com/questions/947954/how-to-have-the-cp-command-create-any-necessary-folders-for-copying-a-file-to-a/947969#947969](https://stackoverflow.com/questions/947954/how-to-have-the-cp-command-create-any-necessary-folders-for-copying-a-file-to-a/947969#947969)
 * [https://stackoverflow.com/questions/16344719/how-to-create-directory-if-needed](https://stackoverflow.com/questions/16344719/how-to-create-directory-if-needed)
+* [https://wiki.libsdl.org/SDL2/SDL_GetTicks](https://wiki.libsdl.org/SDL2/SDL_GetTicks)

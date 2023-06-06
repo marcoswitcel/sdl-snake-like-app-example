@@ -735,6 +735,8 @@ int main(int argc, char **argv)
     handle_events_and_inputs(&context, &should_quit);
 
     {
+      // @note João, não achei a versão 64 bits na minha instalação
+      // https://wiki.libsdl.org/SDL2/SDL_GetTicks
       uint32_t current_timestamp = SDL_GetTicks();
 
       accumulated_time += current_timestamp - last_timestamp;
