@@ -86,13 +86,11 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   iss >> a;
   if (iss.fail() || a > SDL_MAX_UINT8) goto fail;
 
-  trace("Cor consumida e aplicada");
   color.r = static_cast<uint8_t>(r);
   color.g = static_cast<uint8_t>(g);
   color.b = static_cast<uint8_t>(b);
   color.a = static_cast<uint8_t>(a);
-
-  tracef("%d %d %d %d", r, g, b, a);
+  tracef("Cor consumida e aplicada\n%d %d %d %d", r, g, b, a);
 
   return true;
 
