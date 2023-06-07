@@ -325,7 +325,6 @@ bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_hea
 bool export_current_arena_layout(Context_Data *context)
 {
   // @todo João, terminar aqui
-  // falta decidir como exportar a posição de começo do jogador
   // falta decidir se vai adicionar condições de vitórios
   // falta organizar em que arquivo, com que nome vai exportar
   std::stringstream stream;
@@ -333,10 +332,15 @@ bool export_current_arena_layout(Context_Data *context)
   stream << "# Arquivo gerado pelo jogo\n";
 
   // Exportando paredes
+  stream << "\n## Paredes \n\n";
   for (auto &it : *context->arena.walls)
   {
     stream << get_name(ADD_WALL_COMMAND) << " " << it.x << " " << it.y << "\n";
   }
+
+  // Exportando posição inicial
+  stream << "\n## Posição inicial \n\n";
+  stream << get_name(SNAKE_START_POSITION_COMMAND) << " " << SNAKE_START_POSITION.x << " " << SNAKE_START_POSITION.y << "\n";
 
   trace("Abrindo arquivo \"level_output.lvl\"para escrita");
   std::ofstream level_file("level_output.lvl", std::ios::binary);
