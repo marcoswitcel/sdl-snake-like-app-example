@@ -155,6 +155,24 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   return true;
 }
 
+bool try_parse_and_load(std::istringstream &iss)
+{
+  std::string file_name;
+  iss >> file_name;
+
+  if (iss.fail())
+  {
+    trace("Não conseguiu ler o nome do arquivo");
+    return false;
+  }
+
+  tracef("Nome do arquivo consumido\n%s", file_name.c_str());
+
+  // @todo João, terminar de implementar a parte de carregar e aplicar o arquivo
+
+  return true;
+}
+
 void toggle_pause_play(Context_Data *context)
 {
   if (context->state == RUNNING) 
@@ -231,6 +249,7 @@ void load_ini_config()
       else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
       else if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
       else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
+      else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load(iss); }
     } else {
       trace("linha ignorada");
     }
