@@ -24,3 +24,4 @@
 * Achar asset de som ou gerar som simples
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
+* habilidade desmarcar wall
