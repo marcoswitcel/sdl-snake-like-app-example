@@ -162,14 +162,47 @@ bool try_parse_and_load(std::istringstream &iss)
 
   if (iss.fail())
   {
-    trace("Não conseguiu ler o nome do arquivo");
+    trace("Não conseguiu ler o nome do arquivo de level");
     return false;
   }
 
-  tracef("Nome do arquivo consumido\n%s", file_name.c_str());
+  tracef("Nome do arquivo consumido de level: \n%s", file_name.c_str());
 
-  // @todo João, terminar de implementar a parte de carregar e aplicar o arquivo
+  std::ifstream file_handle(file_name, std::ios::in);
 
+  if (!file_handle.good())
+  {
+    tracef("-- arquivo de level não encontrado, comando ignorado %s", get_name(STARTUP_LEVEL_COMMAND));
+    return false;
+  }
+
+  // @todo João, precisamos de uma etapa dedicada a resetar os campos para o valor padrão
+  // abaixom adicione um comando que resta uma das estruturas para o valor padrão, o mesmo
+  // deve ser feito para cores e outros
+  {
+    CURRENT_DEFAULT_WALLS.clear();
+  }
+
+  std::string line;
+  while (std::getline(file_handle, line))
+  {
+    trace("linha encontrada");
+    std::istringstream iss(line);
+    std::string command;
+    iss >> command;
+
+    bool success = !iss.fail();
+
+    if (success) {
+      trace("linha parseada");
+      trace(command.c_str());
+
+      if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
+      else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
+    } else {
+      trace("linha ignorada");
+    }
+  }
   return true;
 }
 
