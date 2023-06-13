@@ -515,6 +515,17 @@ void update(Context_Data *context)
       }
       else
       {
+        // @todo João, testar e generalizar um método de remoção por hora
+        int i = 0;
+        for (auto &it : *context->arena.walls)
+        {
+          if (it.x == wall_position.x && it.y == wall_position.y)
+          {
+            context->arena.walls->erase(context->arena.walls->begin() + i);
+          }
+          i++;
+        }
+
         trace("parede não adicionada, espaço ocupado");
       }
     }
