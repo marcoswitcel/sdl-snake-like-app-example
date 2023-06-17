@@ -26,3 +26,4 @@
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
 * preciso melhorar a forma como renderizo o texto, tá ficando meio distorcido e pixelado..., outra questão é talvez abstrair um pouco a api de renderização dos textos
+* criar um sistema de testes?
