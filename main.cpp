@@ -673,6 +673,15 @@ static inline SDL_Rect makeSquare(const Vec2<unsigned> &pos, unsigned arena_rect
   };
 }
 
+// Cobre toda a imagem com uma sobreposição preta com transparência
+static inline void draw_overlay(SDL_Renderer *renderer)
+{
+  SDL_Rect overlay = { .x = 0, .y = 0, .w = WIDTH, .h = HEIGHT, };
+  SDL_Color overlay_color = { 0, 0, 0, 160, };
+  SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+  SDL_RenderFillRect(renderer, &overlay);
+}
+
 void render_scene(SDL_Renderer *renderer, Context_Data *context)
 {
   const unsigned arena_rect_size = context->arena.cell_size;  
@@ -753,13 +762,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   if (default_font && context->state == GAME_OVER)
   {
-    // Cobre toda a imagem com uma sobreposição preta com transparência
-    {
-      SDL_Rect overlay = { .x = 0, .y = 0, .w = WIDTH, .h = HEIGHT, };
-      SDL_Color overlay_color = { 0, 0, 0, 160, };
-      SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
-      SDL_RenderFillRect(renderer, &overlay);
-    }
+    draw_overlay(renderer);
 
     SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, "Fim do jogo", default_text_color);
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
@@ -769,13 +772,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
   if (default_font && context->state == WINNER)
   {
-    // Cobre toda a imagem com uma sobreposição preta com transparência
-    {
-      SDL_Rect overlay = { .x = 0, .y = 0, .w = WIDTH, .h = HEIGHT, };
-      SDL_Color overlay_color = { 0, 0, 0, 160, };
-      SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
-      SDL_RenderFillRect(renderer, &overlay);
-    }
+    draw_overlay(renderer);
 
     // Mensagem de vitória
     {
