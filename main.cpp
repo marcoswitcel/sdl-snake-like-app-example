@@ -62,6 +62,7 @@ typedef struct Context_Data {
     .cell_size = CELL_SIZE,
     .walls = new std::deque<Vec2<unsigned>>(),
     .fruits = new std::deque<Vec2<unsigned>>(),
+    .win_condition = { .type = NO_TYPE, .data = {}, },
   };
   bool pointer_activated = false;
   Game_State state = RUNNING;
@@ -281,6 +282,12 @@ void load_ini_config()
       else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
       else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load(iss); }
+      else if (get_name(WIN_CONDITION_BY_GROWTH_COMMAND) == command) {
+        if (try_parse_and_apply_unsgined(context.arena.win_condition.data.grow_number, iss))
+        {
+          context.arena.win_condition.type = BY_GROWING;
+        }
+      }
     } else {
       trace("linha ignorada");
     }

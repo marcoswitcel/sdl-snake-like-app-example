@@ -15,12 +15,25 @@ typedef enum Snake_Dir {
     NONE,
 } Snake_Dir;
 
+typedef enum Win_Condition_Type {
+    NO_TYPE,
+    BY_GROWING,
+} Win_Condition_Type;
+
+typedef struct Win_Condition {
+    Win_Condition_Type type;
+    union {
+        unsigned grow_number;
+    } data;
+} Win_Condition;
+
 typedef struct Arena {
     unsigned width;
     unsigned height;
     signed cell_size;
     std::deque<Vec2<unsigned>> *walls;
-    std::deque<Vec2<unsigned>> *fruits; 
+    std::deque<Vec2<unsigned>> *fruits;
+    Win_Condition win_condition;
 } Arena;
 
 typedef struct Snake_Entity
