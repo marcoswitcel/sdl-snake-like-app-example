@@ -189,10 +189,13 @@ bool load_level_data(Context_Data &context, const char *file_name)
   }
 
   // @todo João, precisamos de uma etapa dedicada a resetar os campos para o valor padrão
-  // abaixom adicione um comando que resta uma das estruturas para o valor padrão, o mesmo
-  // deve ser feito para cores e outros
+  // abaixom adicione alguns comandos que para restar umas das estruturas para o valor padrão
+  // talvez isso possa acontecer sempre aqui, mas precisa ser validado
   {
+    // relacionadas ao level
     CURRENT_DEFAULT_WALLS.clear();
+    context.arena.next_level = NULL;
+    context.arena.win_condition.type = NO_TYPE;
   }
 
   std::string line;
@@ -292,12 +295,7 @@ void load_ini_config()
     return;
   }
 
-  // @todo João, precisamos de uma etapa dedicada a resetar os campos para o valor padrão
-  // abaixom adicione um comando que resta uma das estruturas para o valor padrão, o mesmo
-  // deve ser feito para cores e outros
-  {
-    CURRENT_DEFAULT_WALLS.clear();
-  }
+  // @todo João, precisamos de uma etapa dedicada a resetar o estado para as cores padrões aqui
 
   std::string line;
   while (std::getline(file_handle, line))
