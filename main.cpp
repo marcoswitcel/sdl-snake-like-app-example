@@ -42,6 +42,7 @@ typedef enum Game_State {
   RUNNING,
   MENU,
   GAME_OVER,
+  WINNER,
 } Game_State;
 
 typedef struct Context_Data {
@@ -221,6 +222,12 @@ bool try_parse_and_load(std::istringstream &iss)
 
       if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
       else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
+      else if (get_name(WIN_CONDITION_BY_GROWTH_COMMAND) == command) {
+        if (try_parse_and_apply_unsgined(context.arena.win_condition.data.grow_number, iss))
+        {
+          context.arena.win_condition.type = BY_GROWING;
+        }
+      }
       else if (get_name(NEXT_LEVEL_COMMAND) == command) {
         const char *old_file_name = context.arena.next_level;
         if (try_parse_and_apply_file_name(&context.arena.next_level, iss))
@@ -310,12 +317,6 @@ void load_ini_config()
       else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
       else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load(iss); }
-      else if (get_name(WIN_CONDITION_BY_GROWTH_COMMAND) == command) {
-        if (try_parse_and_apply_unsgined(context.arena.win_condition.data.grow_number, iss))
-        {
-          context.arena.win_condition.type = BY_GROWING;
-        }
-      }
     } else {
       trace("linha ignorada");
     }
@@ -512,9 +513,28 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   }
 }
 
+void check_win_condition(Context_Data * context)
+{
+  bool won = false;
+
+  // implementações de cheque
+  switch (context->arena.win_condition.type)
+  {
+    case BY_GROWING: {
+      won = context->snake.body->size() >= context->arena.win_condition.data.grow_number;
+    } break;
+    case NO_TYPE: {} break;
+    default: {} break;
+  }
+
+  if (won) context->state = WINNER;
+}
+
 void update(Context_Data *context)
 {
   const unsigned arena_rect_size = context->arena.cell_size;
+
+  check_win_condition(context);
 
   if (context->arena.fruits->size() == 0)
   {
@@ -565,7 +585,7 @@ void update(Context_Data *context)
     context->clicked = false;
   }
 
-  if (context->state == PAUSED || context->state == GAME_OVER) return;
+  if (context->state == PAUSED || context->state == GAME_OVER || context->state == WINNER) return;
 
   // Atualiza direção da cobrinha seguindo algumas restrições
   switch (context->snake_dir_input)
@@ -745,6 +765,37 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
     SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+  }
+
+  if (default_font && context->state == WINNER)
+  {
+    // Cobre toda a imagem com uma sobreposição preta com transparência
+    {
+      SDL_Rect overlay = { .x = 0, .y = 0, .w = WIDTH, .h = HEIGHT, };
+      SDL_Color overlay_color = { 0, 0, 0, 160, };
+      SDL_SetRenderDrawColor(renderer, overlay_color.r, overlay_color.g, overlay_color.b, overlay_color.a);
+      SDL_RenderFillRect(renderer, &overlay);
+    }
+
+    // Mensagem de vitória
+    {
+      SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, "Você ganhou", default_text_color);
+      SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
+      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
+      SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+    }
+
+    // apresenta qual o próximo nível
+    if (context->arena.next_level)
+    {
+      char message_buffer[200]; // @note possível overflow aqui?
+      sprintf(message_buffer, "Próximo level: %s", context->arena.next_level);
+
+      SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, message_buffer, default_text_color);
+      SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
+      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = strlen(context->arena.next_level) * 30, .h = 30 };
+      SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+    }
   }
 
   // Faz o swap do backbuffer com o buffer da tela?

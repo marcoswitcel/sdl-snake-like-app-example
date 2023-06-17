@@ -59,3 +59,4 @@ sudo apt-get install -y libsdl2-ttf-dev
 * [https://stackoverflow.com/questions/16344719/how-to-create-directory-if-needed](https://stackoverflow.com/questions/16344719/how-to-create-directory-if-needed)
 * [https://wiki.libsdl.org/SDL2/SDL_GetTicks](https://wiki.libsdl.org/SDL2/SDL_GetTicks)
 * [https://en.wikibooks.org/wiki/Polymorphic_Data_Structures_in_C/Introduction_to_C_Constructs](https://en.wikibooks.org/wiki/Polymorphic_Data_Structures_in_C/Introduction_to_C_Constructs)
+* [https://stackoverflow.com/questions/37577816/rendering-font-with-utf8-in-sdl-ttf](https://stackoverflow.com/questions/37577816/rendering-font-with-utf8-in-sdl-ttf)
