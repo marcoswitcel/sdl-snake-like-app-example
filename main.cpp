@@ -63,6 +63,7 @@ typedef struct Context_Data {
     .walls = new std::deque<Vec2<unsigned>>(),
     .fruits = new std::deque<Vec2<unsigned>>(),
     .win_condition = { .type = NO_TYPE, .data = {}, },
+    .next_level = NULL,
   };
   bool pointer_activated = false;
   Game_State state = RUNNING;
@@ -156,6 +157,26 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   return true;
 }
 
+bool try_parse_and_apply_file_name(const char **dest, std::istringstream &iss)
+{
+  std::string file_name;
+  iss >> file_name;
+
+  if (iss.fail())
+  {
+    trace("Não conseguiu ler o nome do arquivo de level");
+    return false;
+  }
+
+  tracef("Nome do arquivo consumido de level: \n%s", file_name.c_str());
+  
+  char * copy = (char *) malloc(file_name.size() + 1);
+  memcpy(copy, file_name.c_str(), file_name.size() + 1);
+  *dest = copy;
+
+  return true;
+}
+
 bool try_parse_and_load(std::istringstream &iss)
 {
   std::string file_name;
@@ -200,6 +221,13 @@ bool try_parse_and_load(std::istringstream &iss)
 
       if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
       else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
+      else if (get_name(NEXT_LEVEL_COMMAND) == command) {
+        const char *old_file_name = context.arena.next_level;
+        if (try_parse_and_apply_file_name(&context.arena.next_level, iss))
+        {
+          free((void *) old_file_name);
+        }
+      }
     } else {
       trace("linha ignorada");
     }
