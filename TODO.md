@@ -15,7 +15,8 @@
 * como vou renderizar textos? -- ok
 * ajustar argumentos do compilador -- ok
 * Escolher uma fonte legal para os textos no google fontes ([https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn](https://fonts.google.com/specimen/Roboto+Mono?preview.text=jogo%20terminado&preview.text_type=custom&category=Monospace&subset=latin&noto.script=Latn)) -- ok
-* criar perfis de cores? para a renderização do mapa
+* habilidade desmarcar wall -- ok
+* criar perfis de cores? para a renderização do mapa -- ok
 * adicionar alguma mecanismo de carregamento de arquivo .ini e arquivos de level
 * ajustar para copiar sample de configurações
 * adicionar paredes e talvez outros tipos de obstáculos
@@ -24,4 +25,4 @@
 * Achar asset de som ou gerar som simples
 * Implementar código para executar som, e definir momentos
 * Adicionar alguma sistema de command prompt?
-* habilidade desmarcar wall
+* preciso melhorar a forma como renderizo o texto, tá ficando meio distorcido e pixelado..., outra questão é talvez abstrair um pouco a api de renderização dos textos
