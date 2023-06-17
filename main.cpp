@@ -280,8 +280,6 @@ void load_ini_config()
       else if (get_name(WALL_COLOR_COMMAND) == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
-      else if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
-      else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
       else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load(iss); }
     } else {
       trace("linha ignorada");
