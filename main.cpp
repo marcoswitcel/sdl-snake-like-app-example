@@ -790,7 +790,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
       SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, message_buffer, default_text_color);
       SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
-      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = strlen(context->arena.next_level) * 30, .h = 30 };
+      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
       SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
     }
   }
