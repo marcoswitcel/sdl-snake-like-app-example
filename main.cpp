@@ -178,19 +178,8 @@ bool try_parse_and_apply_file_name(const char **dest, std::istringstream &iss)
   return true;
 }
 
-bool try_parse_and_load(std::istringstream &iss)
+bool load_level_data(Context_Data &context, const char *file_name)
 {
-  std::string file_name;
-  iss >> file_name;
-
-  if (iss.fail())
-  {
-    trace("Não conseguiu ler o nome do arquivo de level");
-    return false;
-  }
-
-  tracef("Nome do arquivo consumido de level: \n%s", file_name.c_str());
-
   std::ifstream file_handle(file_name, std::ios::in);
 
   if (!file_handle.good())
@@ -240,6 +229,22 @@ bool try_parse_and_load(std::istringstream &iss)
     }
   }
   return true;
+}
+
+bool try_parse_and_load_level(std::istringstream &iss)
+{
+  std::string file_name;
+  iss >> file_name;
+
+  if (iss.fail())
+  {
+    trace("Não conseguiu ler o nome do arquivo de level");
+    return false;
+  }
+
+  tracef("Nome do arquivo consumido de level: \n%s", file_name.c_str());
+
+  return load_level_data(context, file_name.c_str());
 }
 
 void toggle_pause_play(Context_Data *context)
@@ -316,7 +321,7 @@ void load_ini_config()
       else if (get_name(WALL_COLOR_COMMAND) == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
       else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
       else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
-      else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load(iss); }
+      else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load_level(iss); }
     } else {
       trace("linha ignorada");
     }
@@ -443,6 +448,18 @@ bool export_current_arena_layout(Context_Data *context)
   return true;
 }
 
+void handle_return(Context_Data *context)
+{
+  if (context->state == WINNER && context->arena.next_level)
+  {
+    bool loaded = load_level_data(*context, context->arena.next_level);
+
+    if (!loaded) return;
+
+    reset_arena(context);
+  }
+}
+
 void handle_events_and_inputs(Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
@@ -474,6 +491,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_S: { snake_dir = DOWN;  } break;
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
+              case SDL_SCANCODE_RETURN: { handle_return(context); } break;
 #ifdef DEV_CODE_ENABLED
               case SDL_SCANCODE_P: { toggle_pause_play(context); } break;
               case SDL_SCANCODE_R: { reset_arena(context); } break;
