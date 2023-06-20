@@ -65,6 +65,7 @@ typedef struct Context_Data {
     .fruits = new std::deque<Vec2<unsigned>>(),
     .win_condition = { .type = NO_TYPE, .data = {}, },
     .next_level = NULL,
+    .current_level_file_name = NULL,
   };
   bool pointer_activated = false;
   Game_State state = RUNNING;
@@ -158,6 +159,14 @@ bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
   return true;
 }
 
+char * copy(const char *source)
+{
+  size_t size = strlen(source);
+  char * copy = (char *) malloc(size + 1);
+  memcpy(copy, source, size + 1);
+  return copy;
+}
+
 bool try_parse_and_apply_file_name(const char **dest, std::istringstream &iss)
 {
   std::string file_name;
@@ -182,6 +191,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
 {
   std::ifstream file_handle(file_name, std::ios::in);
 
+  tracef("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1 %s ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", file_name);
   if (!file_handle.good())
   {
     tracef("-- arquivo de level não encontrado, comando ignorado %s", get_name(STARTUP_LEVEL_COMMAND));
@@ -194,6 +204,9 @@ bool load_level_data(Context_Data &context, const char *file_name)
   {
     // relacionadas ao level
     CURRENT_DEFAULT_WALLS.clear();
+    //free((void *) context.arena.next_level); // @todo João, algo muito errado aqui, se eu faço o free dessa memória
+    // zoa a variável file_name?????? por quê? (quando eu chmado load_level_data, tem um cenário que ele receb next_level
+    // efetivamente as duas variáveis apontam pro mesmo lugar)
     context.arena.next_level = NULL;
     context.arena.win_condition.type = NO_TYPE;
   }
@@ -230,6 +243,11 @@ bool load_level_data(Context_Data &context, const char *file_name)
     } else {
       trace("linha ignorada");
     }
+  }
+  // salvando nome do level carregado
+  {
+    free((void *)context.arena.current_level_file_name);
+    context.arena.current_level_file_name = copy(file_name);
   }
   return true;
 }
@@ -431,8 +449,20 @@ bool export_current_arena_layout(Context_Data *context)
   stream << "\n## Posição inicial \n\n";
   stream << get_name(SNAKE_START_POSITION_COMMAND) << " " << SNAKE_START_POSITION.x << " " << SNAKE_START_POSITION.y << "\n";
 
-  trace("Abrindo arquivo \"level_output.lvl\"para escrita");
-  std::ofstream level_file("level_output.lvl", std::ios::binary);
+  // Exportando next level e condições de vitória
+  stream << "\n## Next level e condições de vitória \n\n";
+  if (context->arena.next_level)
+  {
+    stream << get_name(NEXT_LEVEL_COMMAND) << " " << context->arena.next_level << "\n";
+  }
+  if (context->arena.win_condition.type == BY_GROWING)
+  {
+    stream << get_name(WIN_CONDITION_BY_GROWTH_COMMAND) << " " << context->arena.win_condition.data.grow_number << "\n";
+  }
+
+  const char *file_name = context->arena.current_level_file_name ? context->arena.current_level_file_name : "level_output.lvl";
+  tracef("Abrindo arquivo \"%s\"para escrita", file_name);
+  std::ofstream level_file(file_name, std::ios::binary);
 
   if (level_file.bad()) {
     trace("-- arquivo não aberto");

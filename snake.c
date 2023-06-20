@@ -35,6 +35,7 @@ typedef struct Arena {
     std::deque<Vec2<unsigned>> *fruits;
     Win_Condition win_condition;
     const char * next_level;
+    const char * current_level_file_name;
 } Arena;
 
 typedef struct Snake_Entity
