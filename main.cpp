@@ -191,7 +191,6 @@ bool load_level_data(Context_Data &context, const char *file_name)
 {
   std::ifstream file_handle(file_name, std::ios::in);
 
-  tracef("[[[[[[[[[[[[[[[[[[[[[[[[[[[[[1 %s ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]", file_name);
   if (!file_handle.good())
   {
     tracef("-- arquivo de level não encontrado, comando ignorado %s", get_name(STARTUP_LEVEL_COMMAND));
