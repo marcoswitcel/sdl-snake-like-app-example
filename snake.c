@@ -36,7 +36,15 @@ typedef struct Arena {
     Win_Condition win_condition;
     const char * next_level;
     const char * current_level_file_name;
+    unsigned loose_condition;
 } Arena;
+
+typedef enum Arena_Lose_Conditions_Flags {
+    DO_NOT_LOOSE         = 0,
+    LOOSE_ON_HIT_WALL    = 1,
+    LOOSE_ON_HIT_BORDERS = 2,
+    LOOSE_ON_HIT_BODY    = 4,
+} Arena_Lose_Conditions_Flags;
 
 typedef struct Snake_Entity
 {

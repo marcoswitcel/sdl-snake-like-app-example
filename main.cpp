@@ -66,6 +66,9 @@ typedef struct Context_Data {
     .win_condition = { .type = NO_TYPE, .data = {}, },
     .next_level = NULL,
     .current_level_file_name = NULL,
+    // @todo João, implementar novos comandos para customizar por level as condições de derrota
+    // @todo João, implementar o código necessário apra levar em consideração esse atributo
+    .loose_condition = 0,
   };
   bool pointer_activated = false;
   Game_State state = RUNNING;
