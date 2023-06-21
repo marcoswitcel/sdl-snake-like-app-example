@@ -203,9 +203,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
   {
     // relacionadas ao level
     CURRENT_DEFAULT_WALLS.clear();
-    //free((void *) context.arena.next_level); // @todo João, algo muito errado aqui, se eu faço o free dessa memória
-    // zoa a variável file_name?????? por quê? (quando eu chmado load_level_data, tem um cenário que ele receb next_level
-    // efetivamente as duas variáveis apontam pro mesmo lugar)
+    free((void *) context.arena.next_level);
     context.arena.next_level = NULL;
     context.arena.win_condition.type = NO_TYPE;
   }
@@ -479,7 +477,11 @@ void handle_return(Context_Data *context)
 {
   if (context->state == WINNER && context->arena.next_level)
   {
-    bool loaded = load_level_data(*context, context->arena.next_level);
+    // @todo João, não curti ter que copiar para rodar o método, mas dentro do método ele usa 
+    // o valor do file_name e faz o free do atributo next_level
+    const char *copied_file_name = copy(context->arena.next_level);
+    bool loaded = load_level_data(*context, copied_file_name);
+    free((void *)copied_file_name);
 
     if (!loaded) return;
 
