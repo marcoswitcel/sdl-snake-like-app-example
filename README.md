@@ -61,3 +61,4 @@ sudo apt-get install -y libsdl2-ttf-dev
 * [https://en.wikibooks.org/wiki/Polymorphic_Data_Structures_in_C/Introduction_to_C_Constructs](https://en.wikibooks.org/wiki/Polymorphic_Data_Structures_in_C/Introduction_to_C_Constructs)
 * [https://stackoverflow.com/questions/37577816/rendering-font-with-utf8-in-sdl-ttf](https://stackoverflow.com/questions/37577816/rendering-font-with-utf8-in-sdl-ttf)
 * [https://wiki.libsdl.org/SDL2/SDL_Scancode](https://wiki.libsdl.org/SDL2/SDL_Scancode)
+* [https://stackoverflow.com/questions/1448396/how-to-use-enums-as-flags-in-c](https://stackoverflow.com/questions/1448396/how-to-use-enums-as-flags-in-c)
