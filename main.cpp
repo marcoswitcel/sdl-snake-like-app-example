@@ -690,6 +690,10 @@ void update(Context_Data *context)
   Snake_Entity &snake = context->snake;
   Vec2<unsigned> new_head_position = compute_next_snake_position(context);
   bool is_heading_space_available = is_next_position_valid(context, new_head_position);
+  // @todo João, extrair aqui as funcionalidades da linha acima para poder fazer o cheque
+  // de condição de GAME_OVER com mais facilidade.
+  // bool collided_with_walls = is_colliding_with_walls(context, new_head_position);
+  // bool collided_with_snake_body = is_colliding_with_snake_body(context, new_head_position);
   bool collided_with_border = (snake.dir == LEFT && snake.head.x == 0) ||
     (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
     (snake.dir == UP && snake.head.y == 0) ||
