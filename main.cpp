@@ -392,27 +392,47 @@ Vec2<unsigned> compute_next_snake_position(Context_Data *context)
   return new_head_position;
 }
 
+bool is_colliding_with_snake_body(Context_Data *context, const Vec2<unsigned> &new_head_position)
+{
+  for (auto &it : *context->snake.body)
+  {
+    if (it.x == new_head_position.x && it.y == new_head_position.y)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+bool is_colliding_with_walls(Context_Data *context, const Vec2<unsigned> &new_head_position)
+{
+  for (auto &it : *context->arena.walls)
+  {
+    if (it.x == new_head_position.x && it.y == new_head_position.y)
+    {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_head_position, bool include_fruits = false)
 {
   auto head = context->snake.head;
   if (new_head_position.x == head.x && new_head_position.y == head.y) return false;
   
-  for (auto &it : *context->snake.body)
+  if (is_colliding_with_snake_body(context, new_head_position))
   {
-    if (it.x == new_head_position.x && it.y == new_head_position.y)
-    {
-      return false;
-    }
+    return false;
   }
 
   // @todo João, manter o olho aqui, essa estratégia não escala para outros tipos,
   // talvez fazer uma lista única com "objetos" com tipo e posição, ou um hash espacial
-  for (auto &it : *context->arena.walls)
+  if (is_colliding_with_walls(context, new_head_position))
   {
-    if (it.x == new_head_position.x && it.y == new_head_position.y)
-    {
-      return false;
-    }
+    return false;
   }
 
   if (include_fruits)
