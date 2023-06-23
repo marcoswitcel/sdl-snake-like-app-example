@@ -68,7 +68,7 @@ typedef struct Context_Data {
     .current_level_file_name = NULL,
     // @todo João, implementar novos comandos para customizar por level as condições de derrota
     // @todo João, implementar o código necessário apra levar em consideração esse atributo
-    .loose_condition = 0,
+    .loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL,
   };
   bool pointer_activated = false;
   Game_State state = RUNNING;
@@ -692,8 +692,9 @@ void update(Context_Data *context)
   bool is_heading_space_available = is_next_position_valid(context, new_head_position);
   // @todo João, extrair aqui as funcionalidades da linha acima para poder fazer o cheque
   // de condição de GAME_OVER com mais facilidade.
-  // bool collided_with_walls = is_colliding_with_walls(context, new_head_position);
-  // bool collided_with_snake_body = is_colliding_with_snake_body(context, new_head_position);
+  bool is_in_same_space = new_head_position.x == snake.head.x && new_head_position.y == snake.head.y;
+  bool collided_with_walls = is_colliding_with_walls(context, new_head_position);
+  bool collided_with_snake_body = is_colliding_with_snake_body(context, new_head_position);
   bool collided_with_border = (snake.dir == LEFT && snake.head.x == 0) ||
     (snake.dir == RIGHT && snake.head.x == context->arena.width - 1) ||
     (snake.dir == UP && snake.head.y == 0) ||
@@ -703,7 +704,7 @@ void update(Context_Data *context)
   // @todo João, outro ponto, esse conjunto de ifs controla se o fluxo deve ser interrompido
   // e se o estado deve ser mudado para game_over, mas são questões diferentes, talvez fosse
   // melhor separar.
-  if (collided_with_border || !is_heading_space_available)
+  if (collided_with_border || collided_with_walls || collided_with_snake_body || is_in_same_space)
   {
     if (snake.dir != NONE)
     {
@@ -713,11 +714,22 @@ void update(Context_Data *context)
         {
           context->state = GAME_OVER;
         }
+      } else if (collided_with_walls) {
+        if (context->arena.loose_condition & LOOSE_ON_HIT_WALL)
+        {
+          context->state = GAME_OVER;
+        }
+      } else if (collided_with_snake_body) {
+        if (context->arena.loose_condition & LOOSE_ON_HIT_BODY)
+        {
+          context->state = GAME_OVER;
+        }
       } else if (!is_heading_space_available)
       {
         context->state = GAME_OVER;
       }
     }
+
     return;
   }
 
