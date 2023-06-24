@@ -527,6 +527,8 @@ bool export_current_arena_layout(Context_Data *context)
   stream << "\n## Posição inicial \n\n";
   stream << get_name(SNAKE_START_POSITION_COMMAND) << " " << SNAKE_START_POSITION.x << " " << SNAKE_START_POSITION.y << "\n";
 
+  // @todo João, exportar loose_conditions
+
   // Exportando next level e condições de vitória
   stream << "\n## Next level e condições de vitória \n\n";
   if (context->arena.next_level)
