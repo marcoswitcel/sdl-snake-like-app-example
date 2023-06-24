@@ -209,6 +209,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
     free((void *) context.arena.next_level);
     context.arena.next_level = NULL;
     context.arena.win_condition.type = NO_TYPE;
+    context.arena.loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL,
   }
 
   std::string line;
