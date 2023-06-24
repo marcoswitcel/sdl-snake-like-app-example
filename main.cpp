@@ -209,7 +209,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
     free((void *) context.arena.next_level);
     context.arena.next_level = NULL;
     context.arena.win_condition.type = NO_TYPE;
-    context.arena.loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL,
+    context.arena.loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL;
   }
 
   std::string line;
@@ -240,6 +240,21 @@ bool load_level_data(Context_Data &context, const char *file_name)
         {
           free((void *) old_file_name);
         }
+      } else if (get_name(LOOSE_ON_HIT_WALL_COMMAND) == command) {
+        // @todo João, implementar aqui
+        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
+        // esse parâmetro no campo loose_condition
+        trace("[[ Não implementado ]]");
+      } else if (get_name(LOOSE_ON_HIT_BORDERS_COMMAND) == command) {
+        // @todo João, implementar aqui
+        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
+        // esse parâmetro no campo loose_condition
+        trace("[[ Não implementado ]]");
+      } else if (get_name(LOOSE_ON_HIT_BODY_COMMAND) == command) {
+        // @todo João, implementar aqui
+        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
+        // esse parâmetro no campo loose_condition
+        trace("[[ Não implementado ]]");
       }
     } else {
       trace("linha ignorada");
