@@ -201,7 +201,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
   }
 
   // @todo João, precisamos de uma etapa dedicada a resetar os campos para o valor padrão
-  // abaixom adicione alguns comandos que para restar umas das estruturas para o valor padrão
+  // abaixo adicione alguns comandos que para resetar umas das estruturas para o valor padrão
   // talvez isso possa acontecer sempre aqui, mas precisa ser validado
   {
     // relacionadas ao level
