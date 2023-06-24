@@ -107,6 +107,24 @@ bool try_parse_and_apply_color(SDL_Color &color, std::istringstream &iss)
   }
 }
 
+bool try_parse_and_apply_boolean(bool &flag, std::istringstream &iss)
+{
+  trace("Tentando parsear boolean");
+  bool boolean_value;
+
+  iss >> boolean_value;
+  if (iss.fail())
+  {
+    trace("Não conseguiu parsear a boolean");
+    return false;
+  };
+  
+  flag = boolean_value > 0;
+  tracef("Boolean consumido e aplicado\n%d", boolean_value);
+
+  return true;
+}
+
 bool try_parse_and_apply_vec2(Vec2<unsigned> &position, std::istringstream &iss)
 {
   trace("Tentando parsear cores");
@@ -241,20 +259,44 @@ bool load_level_data(Context_Data &context, const char *file_name)
           free((void *) old_file_name);
         }
       } else if (get_name(LOOSE_ON_HIT_WALL_COMMAND) == command) {
-        // @todo João, implementar aqui
-        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
-        // esse parâmetro no campo loose_condition
-        trace("[[ Não implementado ]]");
+        bool flag = false;
+        if (try_parse_and_apply_boolean(flag, iss))
+        {
+          if (flag)
+          {
+            context.arena.loose_condition |= LOOSE_ON_HIT_WALL;
+          }
+          else
+          {
+            context.arena.loose_condition ^= LOOSE_ON_HIT_WALL;
+          }
+        }
       } else if (get_name(LOOSE_ON_HIT_BORDERS_COMMAND) == command) {
-        // @todo João, implementar aqui
-        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
-        // esse parâmetro no campo loose_condition
-        trace("[[ Não implementado ]]");
+        bool flag = false;
+        if (try_parse_and_apply_boolean(flag, iss))
+        {
+          if (flag)
+          {
+            context.arena.loose_condition |= LOOSE_ON_HIT_BORDERS;
+          }
+          else
+          {
+            context.arena.loose_condition ^= LOOSE_ON_HIT_BORDERS;
+          }
+        }
       } else if (get_name(LOOSE_ON_HIT_BODY_COMMAND) == command) {
-        // @todo João, implementar aqui
-        // adicionar o comando para parsear um booleano e usar a máscara certa para ativar ou desativar
-        // esse parâmetro no campo loose_condition
-        trace("[[ Não implementado ]]");
+        bool flag = false;
+        if (try_parse_and_apply_boolean(flag, iss))
+        {
+          if (flag)
+          {
+            context.arena.loose_condition |= LOOSE_ON_HIT_BODY;
+          }
+          else
+          {
+            context.arena.loose_condition ^= LOOSE_ON_HIT_BODY;
+          }
+        }
       }
     } else {
       trace("linha ignorada");
