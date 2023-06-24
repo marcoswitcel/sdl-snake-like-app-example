@@ -509,9 +509,6 @@ bool is_next_position_valid(Context_Data *context, const Vec2<unsigned> &new_hea
 
 bool export_current_arena_layout(Context_Data *context)
 {
-  // @todo João, terminar aqui
-  // falta decidir se vai adicionar condições de vitórios
-  // falta organizar em que arquivo, com que nome vai exportar
   std::stringstream stream;
 
   stream << "# Arquivo gerado pelo jogo\n";
@@ -527,7 +524,18 @@ bool export_current_arena_layout(Context_Data *context)
   stream << "\n## Posição inicial \n\n";
   stream << get_name(SNAKE_START_POSITION_COMMAND) << " " << SNAKE_START_POSITION.x << " " << SNAKE_START_POSITION.y << "\n";
 
-  // @todo João, exportar loose_conditions
+  // Exportando condições de GAME_OVER
+  stream << "\n## Condições de GAME_OVER \n\n";
+  {
+    bool flag_value = (context->arena.loose_condition & LOOSE_ON_HIT_WALL) > 0;
+    stream << get_name(LOOSE_ON_HIT_WALL_COMMAND) << " " << flag_value << "\n";
+
+    flag_value = (context->arena.loose_condition & LOOSE_ON_HIT_BORDERS) > 0;
+    stream << get_name(LOOSE_ON_HIT_BORDERS_COMMAND) << " " << flag_value << "\n";
+
+    flag_value = (context->arena.loose_condition & LOOSE_ON_HIT_BODY) > 0;
+    stream << get_name(LOOSE_ON_HIT_BODY_COMMAND) << " " << flag_value << "\n";
+  }
 
   // Exportando next level e condições de vitória
   stream << "\n## Next level e condições de vitória \n\n";
