@@ -160,7 +160,7 @@ bool try_parse_and_add_wall(std::istringstream &iss)
   return false;
 }
 
-bool try_parse_and_apply_unsgined(unsigned &number, std::istringstream &iss)
+bool try_parse_and_apply_unsigned(unsigned &number, std::istringstream &iss)
 {
   trace("Tentando parsear número");
   unsigned local_number;
@@ -245,7 +245,7 @@ bool load_level_data(Context_Data &context, const char *file_name)
       if (get_name(SNAKE_START_POSITION_COMMAND) == command) { try_parse_and_apply_vec2(SNAKE_START_POSITION, iss); }
       else if (get_name(ADD_WALL_COMMAND) == command) { try_parse_and_add_wall(iss); }
       else if (get_name(WIN_CONDITION_BY_GROWTH_COMMAND) == command) {
-        if (try_parse_and_apply_unsgined(context.arena.win_condition.data.grow_number, iss))
+        if (try_parse_and_apply_unsigned(context.arena.win_condition.data.grow_number, iss))
         {
           context.arena.win_condition.type = BY_GROWING;
         }
@@ -390,8 +390,8 @@ void load_ini_config()
       else if (get_name(SNAKE_COLOR_COMMAND) == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
       else if (get_name(FRUIT_COLOR_COMMAND) == command) { try_parse_and_apply_color(FRUIT_COLOR, iss); }
       else if (get_name(WALL_COLOR_COMMAND) == command) { try_parse_and_apply_color(WALL_COLOR, iss); }
-      else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(TIMES_PER_SECOND, iss); }
-      else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsgined(UI_TICKS_PER_SECOND, iss); }
+      else if (get_name(SNAKE_ARENA_TICK_COMMAND) == command) { try_parse_and_apply_unsigned(TIMES_PER_SECOND, iss); }
+      else if (get_name(UI_TICK_COMMAND) == command) { try_parse_and_apply_unsigned(UI_TICKS_PER_SECOND, iss); }
       else if (get_name(STARTUP_LEVEL_COMMAND) == command) { try_parse_and_load_level(iss); }
     } else {
       trace("linha ignorada");
@@ -968,7 +968,6 @@ int main(int argc, char **argv)
   printf("Olá mundo do SDL!\n");
   #ifdef DEV_CODE_ENABLED
   printf("=====================================\n");
-
   printf("|          DEV Build                |\n");
   printf("=====================================\n");
   #endif
