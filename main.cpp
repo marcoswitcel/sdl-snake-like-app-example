@@ -66,8 +66,6 @@ typedef struct Context_Data {
     .win_condition = { .type = NO_TYPE, .data = {}, },
     .next_level = NULL,
     .current_level_file_name = NULL,
-    // @todo João, implementar novos comandos para customizar por level as condições de derrota
-    // @todo João, implementar o código necessário apra levar em consideração esse atributo
     .loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL,
   };
   bool pointer_activated = false;
@@ -387,7 +385,6 @@ void load_ini_config()
       trace("linha parseada");
       trace(command.c_str());
 
-      // @todo João, finalizar, mais comandos aqui
       // @todo João, sanitizar os valores lidos para `TIMES_PER_SECOND` e `TIMES_PER_SECOND`
       if (get_name(BACKGROUD_COLOR_COMMAND) == command) { try_parse_and_apply_color(BG_COLOR, iss); }
       else if (get_name(SNAKE_COLOR_COMMAND) == command) { try_parse_and_apply_color(SNAKE_COLOR, iss); }
@@ -668,6 +665,22 @@ void check_win_condition(Context_Data * context)
   if (won) context->state = WINNER;
 }
 
+bool remove_value_from_deque(std::deque<Vec2<unsigned int>> &deque, Vec2<unsigned> &compared_to)
+{
+  int i = 0;
+  for (auto &it : deque)
+  {
+    if (it.x == compared_to.x && it.y == compared_to.y)
+    {
+      deque.erase(deque.begin() + i);
+      return true;
+    }
+    i++;
+  }
+
+  return false;
+}
+
 void update(Context_Data *context)
 {
   const unsigned arena_rect_size = context->arena.cell_size;
@@ -706,18 +719,14 @@ void update(Context_Data *context)
       }
       else
       {
-        // @todo João, testar e generalizar um método de remoção por hora
-        int i = 0;
-        for (auto &it : *context->arena.walls)
+        if (remove_value_from_deque(*context->arena.walls, wall_position))
         {
-          if (it.x == wall_position.x && it.y == wall_position.y)
-          {
-            context->arena.walls->erase(context->arena.walls->begin() + i);
-          }
-          i++;
+          trace("parede removida");
         }
-
-        trace("parede não adicionada, espaço ocupado");
+        else
+        {
+          trace("parede não adicionada, espaço ocupado");
+        }
       }
     }
     context->clicked = false;
@@ -811,20 +820,7 @@ void update(Context_Data *context)
   // Movimento e espaço restringido é garantido aqui
   context->snake.head = new_head_position;
 
-  // Checa se houve contato com um fruta, caso sim, a cobrinha vai crescer
-  bool should_grow = false;
-  int i = 0;
-  for (auto &ref : *context->arena.fruits)
-  {
-    if (ref.x == context->snake.head.x && ref.y == context->snake.head.y)
-    {
-      should_grow = true;
-      context->arena.fruits->erase(context->arena.fruits->begin() + i);
-      break;
-    }
-    i++;
-  }
-  if (!should_grow)
+  if (!remove_value_from_deque(*context->arena.fruits, context->snake.head))
   {
     context->snake.body->pop_back();
   }
