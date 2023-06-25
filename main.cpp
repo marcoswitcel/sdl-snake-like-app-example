@@ -1063,12 +1063,8 @@ int main(int argc, char **argv)
     // Renderiza
     render_scene(renderer, &context);
     
-    // @note Solução temporária para mirar em atualizar 60 vezes por segundo
     SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
-
-  // Se chegar até aqui vai deixar a janela aberta por 5 segundos
-  // SDL_Delay(5 * 1000);
 
   if (default_font)
   {
@@ -1078,7 +1074,6 @@ int main(int argc, char **argv)
   TTF_Quit();
   trace("Extensão de fontes encerrada");
 
-  // Supostamente devo chamar `SDL_DestroyWindow` em algum momento
   SDL_DestroyWindow(window);
   SDL_Quit();
   trace("Aplicação encerrada com sucesso");
