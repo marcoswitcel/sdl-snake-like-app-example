@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
@@ -765,10 +766,7 @@ void update(Context_Data *context)
   }
 
   Snake_Entity &snake = context->snake;
-  Vec2<unsigned> new_head_position = compute_next_snake_position(context);
-  bool is_heading_space_available = is_next_position_valid(context, new_head_position);
-  // @todo João, extrair aqui as funcionalidades da linha acima para poder fazer o cheque
-  // de condição de GAME_OVER com mais facilidade.
+  const Vec2<unsigned> new_head_position = compute_next_snake_position(context);
   bool is_in_same_space = new_head_position.x == snake.head.x && new_head_position.y == snake.head.y;
   bool collided_with_walls = is_colliding_with_walls(context, new_head_position);
   bool collided_with_snake_body = is_colliding_with_snake_body(context, new_head_position);
@@ -801,9 +799,6 @@ void update(Context_Data *context)
         {
           context->state = GAME_OVER;
         }
-      } else if (!is_heading_space_available)
-      {
-        context->state = GAME_OVER;
       }
     }
 
