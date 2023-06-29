@@ -14,6 +14,7 @@
 #include "./dev-utils.c"
 #include "./export-level.cpp"
 #include "./snake.c"
+#include "./gui.cpp"
 
 
 static constexpr int CELL_SIZE = 20;
@@ -950,6 +951,13 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
       SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
       SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+    }
+
+    // @todo João, terminar aqui
+    // @work-in-progress
+    {
+      Button button = { .text = "Botão", .hover = false, .width = 160, .height = 30, .background_color = {.r = 0, .g = 100, .b = 0, .a = 255, },  };
+      draw_button(renderer, button, default_font, default_text_color);
     }
   }
 
