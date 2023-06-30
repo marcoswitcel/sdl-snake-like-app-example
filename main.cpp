@@ -959,8 +959,30 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   // @todo João, terminar aqui
   // @work-in-progress
   {
-    Button button = { .text = "Botão", .hover = false, .width = 160, .height = 30, .background_color = {.r = 0, .g = 100, .b = 0, .a = 255, }, .highlight_background_color = {.r = 0, .g = 150, .b = 0, .a = 255, },  };
-    draw_button(renderer, button, default_font, default_text_color);
+    Button button = {
+      .text = "Próximo Nível",
+      .hover = false,
+      .target_area = {
+        .x = 100,
+        .y = 100,
+        .w = 160,
+        .h = 30,
+      },
+      .background_color = {
+        .r = 0,
+        .g = 100,
+        .b = 0,
+        .a = 255,
+      },
+      .highlight_background_color = {
+        .r = 0,
+        .g = 150,
+        .b = 0,
+        .a = 255,
+      },
+      .timestamp_last_updated = 0,
+    };
+    update_and_draw(renderer, button, default_font, default_text_color);
   }
 
   // Faz o swap do backbuffer com o buffer da tela?
