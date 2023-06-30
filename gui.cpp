@@ -3,18 +3,32 @@
 typedef struct GUI_Globals {
   int32_t mouse_x;
   int32_t mouse_y;
+  int32_t mouse_clicked_x;
+  int32_t mouse_clicked_y;
   uint32_t timestamp_last_updated;
 } GUI_Globals;
 
 static GUI_Globals gui_globals = {
   .mouse_x = 0,
   .mouse_y = 0,
+  .mouse_clicked_x = 0,
+  .mouse_clicked_y = 0,
+  .timestamp_last_updated = 0,
 };
 
 void gui_update_mouse_position(int32_t mouse_x, int32_t mouse_y, uint32_t timestamp_last_updated)
 {
   gui_globals.mouse_x = mouse_x;
   gui_globals.mouse_y = mouse_y;
+  gui_globals.timestamp_last_updated = timestamp_last_updated;
+}
+
+// @todo João,
+/// @work-in-progress
+void gui_update_mouse_clicked(int32_t mouse_clicked_x, int32_t mouse_clicked_y, uint32_t timestamp_last_updated)
+{
+  gui_globals.mouse_clicked_x = mouse_clicked_x;
+  gui_globals.mouse_clicked_y = mouse_clicked_y;
   gui_globals.timestamp_last_updated = timestamp_last_updated;
 }
 
@@ -28,16 +42,30 @@ typedef struct Button {
   // bool active; @todo João, começar com o básico
 } Button;
 
-bool point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
+bool is_point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
 {
   bool result = (pX >= rX && pX <= (rX + rW)) && (pY >= rY && pY <= (rY + rH));
   // tracef("========================== %d %d %d %d %d %d", pX, pY, rY, rW, rH, result);
   return result;
 }
 
+// @todo João,
+/// @work-in-progress
+bool button_was_clicked(Button &button)
+{
+  return is_point_inside_rect(
+    gui_globals.mouse_clicked_x,
+    gui_globals.mouse_clicked_y,
+    button.target_area.x,
+    button.target_area.y,
+    button.target_area.w,
+    button.target_area.h
+  );
+}
+
 bool is_updated(Button &button)
 {
-    return button.timestamp_last_updated == gui_globals.timestamp_last_updated;
+  return button.timestamp_last_updated == gui_globals.timestamp_last_updated;
 }
 
 void button_update_state(Button &button)
@@ -50,7 +78,9 @@ void button_update_state(Button &button)
     h = button.target_area.h,
     mouse_x = gui_globals.mouse_x,
     mouse_y = gui_globals.mouse_y;
-  button.hover = point_inside_rect(mouse_x, mouse_y, x, y, w, h);
+
+  button.hover = is_point_inside_rect(mouse_x, mouse_y, x, y, w, h);
+  button.timestamp_last_updated = gui_globals.timestamp_last_updated;
 }
 
 // @todo João, incompleto, apenas esboçando

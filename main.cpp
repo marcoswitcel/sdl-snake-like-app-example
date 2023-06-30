@@ -630,6 +630,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
           context->clicked = true;
           context->last_clicked_x = event.button.x;
           context->last_clicked_y = event.button.y;
+          gui_update_mouse_clicked(event.button.x, event.button.y, event.common.timestamp);
         }
       } break;
       case SDL_MOUSEMOTION: {
