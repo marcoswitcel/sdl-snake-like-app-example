@@ -956,8 +956,9 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     }
 
   }
-  // @todo João, terminar aqui
-  // @work-in-progress
+  // GUI 
+  // precisa ser melhor pensada, mas está avançando
+  if (false)
   {
     Button button = {
       .text = "Próximo Nível",
