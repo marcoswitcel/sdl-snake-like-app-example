@@ -636,6 +636,8 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
         tracef("motion: x %d, y %d", event.motion.x, event.motion.y);
         context->mouse_x = event.motion.x;
         context->mouse_y = event.motion.y;
+        // Duplicado para isolar @todo João, analisar se de fato faz sentido
+        gui_update_mouse_position(event.motion.x, event.motion.y, event.common.timestamp);
       } break;
     }
   }
@@ -953,12 +955,12 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
     }
 
-    // @todo João, terminar aqui
-    // @work-in-progress
-    {
-      Button button = { .text = "Botão", .hover = false, .width = 160, .height = 30, .background_color = {.r = 0, .g = 100, .b = 0, .a = 255, },  };
-      draw_button(renderer, button, default_font, default_text_color);
-    }
+  }
+  // @todo João, terminar aqui
+  // @work-in-progress
+  {
+    Button button = { .text = "Botão", .hover = false, .width = 160, .height = 30, .background_color = {.r = 0, .g = 100, .b = 0, .a = 255, }, .highlight_background_color = {.r = 0, .g = 150, .b = 0, .a = 255, },  };
+    draw_button(renderer, button, default_font, default_text_color);
   }
 
   // Faz o swap do backbuffer com o buffer da tela?
