@@ -31,6 +31,7 @@ static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
 static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
 static std::deque<Vec2<unsigned>> CURRENT_DEFAULT_WALLS = std::deque<Vec2<unsigned>>();
 static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
+static bool is_menu_active = true;
 
 // Fontes
 TTF_Font *default_font = NULL;
@@ -1006,6 +1007,45 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   SDL_RenderPresent(renderer);
 }
 
+// @todo João, terminar de construir um menu aqui
+// @work-in-progress
+void update_and_draw_menu(SDL_Renderer *renderer, Context_Data *context)
+{
+  // Seta o fundo do renderer
+  SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
+  SDL_RenderClear(renderer);
+
+  Button button = {
+    .text = "Próximo",
+    .hover = false,
+    .active = false,
+    .target_area = {
+      .x = 225,
+      .y = 400,
+      .w = 160,
+      .h = 30,
+    },
+    .background_color = WALL_COLOR,
+    .highlight_background_color = {
+      .r = WALL_COLOR.r,
+      .g = WALL_COLOR.g,
+      .b = WALL_COLOR.b,
+      .a = WALL_COLOR.a * 0.5,
+    },
+    .timestamp_last_updated = 0,
+  };
+  update_and_draw(renderer, button, default_font, default_text_color);
+
+  if (button_was_clicked(button))
+  {
+    load_next_level_and_start(context);
+  }
+
+  // Faz o swap do backbuffer com o buffer da tela?
+  // @link https://wiki.libsdl.org/SDL2/SDL_RenderPresent
+  SDL_RenderPresent(renderer);
+}
+
 int main(int argc, char **argv)
 {
   printf("Olá mundo do SDL!\n");
@@ -1087,6 +1127,11 @@ int main(int argc, char **argv)
     // Processa eventos e inputs
     handle_events_and_inputs(&context, &should_quit);
 
+    if (is_menu_active)
+    {
+      update_and_draw_menu(renderer, &context);
+    }
+    else
     {
       // @note João, não achei a versão 64 bits na minha instalação
       // https://wiki.libsdl.org/SDL2/SDL_GetTicks
@@ -1101,10 +1146,10 @@ int main(int argc, char **argv)
         // Lógica de atualização do jogo (regras)
         update(&context);
       }
+
+      // Renderiza
+      render_scene(renderer, &context);
     }
-   
-    // Renderiza
-    render_scene(renderer, &context);
     
     SDL_Delay(1000 / UI_TICKS_PER_SECOND);
   }
