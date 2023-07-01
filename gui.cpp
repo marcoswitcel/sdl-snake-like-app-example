@@ -5,6 +5,7 @@ typedef struct GUI_Globals {
   int32_t mouse_y;
   int32_t mouse_clicked_x;
   int32_t mouse_clicked_y;
+  bool clicked_in_this_frame;
   uint32_t timestamp_last_updated;
 } GUI_Globals;
 
@@ -13,6 +14,7 @@ static GUI_Globals gui_globals = {
   .mouse_y = 0,
   .mouse_clicked_x = 0,
   .mouse_clicked_y = 0,
+  .clicked_in_this_frame = false,
   .timestamp_last_updated = 0,
 };
 
@@ -29,7 +31,13 @@ void gui_update_mouse_clicked(int32_t mouse_clicked_x, int32_t mouse_clicked_y, 
 {
   gui_globals.mouse_clicked_x = mouse_clicked_x;
   gui_globals.mouse_clicked_y = mouse_clicked_y;
+  gui_globals.clicked_in_this_frame = true;
   gui_globals.timestamp_last_updated = timestamp_last_updated;
+}
+
+void gui_clear_mouse_clicked(void)
+{
+  gui_globals.clicked_in_this_frame = false;
 }
 
 typedef struct Button {
@@ -53,6 +61,8 @@ bool is_point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
 /// @work-in-progress
 bool button_was_clicked(Button &button)
 {
+  if (!gui_globals.clicked_in_this_frame) return false;
+
   return is_point_inside_rect(
     gui_globals.mouse_clicked_x,
     gui_globals.mouse_clicked_y,

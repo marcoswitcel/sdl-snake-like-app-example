@@ -586,6 +586,9 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   // @todo João, por hora apenas a função `update` tá consumindo esse valor, por isso ela reseta o valor para false
   // quando faz uso.
   //context->clicked = false;
+
+  // @note Talvez mover esse trecho para outra parte do código, uma parte dedicada a resetar estado antes de processar os inputs?
+  gui_clear_mouse_clicked();
   
   // Processa eventos
 #pragma GCC diagnostic push
@@ -959,7 +962,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   }
   // GUI 
   // precisa ser melhor pensada, mas está avançando
-  if (false)
+  if (true)
   {
     Button button = {
       .text = "Próximo Nível",
@@ -985,6 +988,11 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       .timestamp_last_updated = 0,
     };
     update_and_draw(renderer, button, default_font, default_text_color);
+
+    if (button_was_clicked(button))
+    {
+      printf("==============================================");
+    }
   }
 
   // Faz o swap do backbuffer com o buffer da tela?
