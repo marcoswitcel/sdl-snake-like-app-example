@@ -962,11 +962,12 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
   }
   // GUI 
   // precisa ser melhor pensada, mas está avançando
-  if (true)
+  if (false)
   {
     Button button = {
       .text = "Próximo Nível",
       .hover = false,
+      .active = false,
       .target_area = {
         .x = 100,
         .y = 100,

@@ -25,8 +25,6 @@ void gui_update_mouse_position(int32_t mouse_x, int32_t mouse_y, uint32_t timest
   gui_globals.timestamp_last_updated = timestamp_last_updated;
 }
 
-// @todo João,
-/// @work-in-progress
 void gui_update_mouse_clicked(int32_t mouse_clicked_x, int32_t mouse_clicked_y, uint32_t timestamp_last_updated)
 {
   gui_globals.mouse_clicked_x = mouse_clicked_x;
@@ -43,11 +41,11 @@ void gui_clear_mouse_clicked(void)
 typedef struct Button {
   const char *text;
   bool hover;
+  bool active;
   SDL_Rect target_area;
   SDL_Color background_color;
   SDL_Color highlight_background_color;
   uint32_t timestamp_last_updated;
-  // bool active; @todo João, começar com o básico
 } Button;
 
 bool is_point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
@@ -57,8 +55,6 @@ bool is_point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
   return result;
 }
 
-// @todo João,
-/// @work-in-progress
 bool button_was_clicked(Button &button)
 {
   if (!gui_globals.clicked_in_this_frame) return false;
@@ -90,17 +86,20 @@ void button_update_state(Button &button)
     mouse_y = gui_globals.mouse_y;
 
   button.hover = is_point_inside_rect(mouse_x, mouse_y, x, y, w, h);
+  button.active = button_was_clicked(button);
   button.timestamp_last_updated = gui_globals.timestamp_last_updated;
 }
 
-// @todo João, incompleto, apenas esboçando
-// @work-in-progress
 void draw_button(SDL_Renderer *renderer, Button &button, TTF_Font *default_font, SDL_Color default_text_color)
 {
   const int margin = 5; // @todo João, deixar mais flexível isso aqui
 
   SDL_Rect overlay = button.target_area;
   SDL_Color background_color = (button.hover) ? button.highlight_background_color : button.background_color;
+  if (button.active)
+  {
+    background_color.a *= 0.8; // @note Temporário para gerar um diferença quando clicado
+  }
   SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
   SDL_RenderFillRect(renderer, &overlay);
 
