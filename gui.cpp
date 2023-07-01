@@ -48,6 +48,29 @@ typedef struct Button {
   uint32_t timestamp_last_updated;
 } Button;
 
+inline Button create_button(const char *text, SDL_Rect target_area, SDL_Color background_color, SDL_Color highlight_background_color)
+{
+  return {
+    .text = text,
+    .hover = false,
+    .active = false,
+    .target_area = target_area,
+    .background_color = background_color,
+    .highlight_background_color = highlight_background_color,
+    .timestamp_last_updated = 0,
+  };
+}
+
+inline SDL_Color color(uint8_t r, uint8_t g, uint8_t b, uint8_t a)
+{
+  return { .r = r, .g = g, .b = b, .a = a, };
+}
+
+inline SDL_Rect rect(int x, int y, int w, int h)
+{
+  return { .x = x, .y = y, .w = w, .h = h, };
+}
+
 bool is_point_inside_rect(int pX, int pY, int rX, int rY, int rW, int rH)
 {
   bool result = (pX >= rX && pX <= (rX + rW)) && (pY >= rY && pY <= (rY + rH));
