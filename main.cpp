@@ -1009,36 +1009,18 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
 // @todo João, terminar de construir um menu aqui
 // @work-in-progress
-void update_and_draw_menu(SDL_Renderer *renderer, Context_Data *context)
+void update_and_draw_menu(SDL_Renderer *renderer)
 {
   // Seta o fundo do renderer
   SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
   SDL_RenderClear(renderer);
 
-  Button button = {
-    .text = "Próximo",
-    .hover = false,
-    .active = false,
-    .target_area = {
-      .x = 225,
-      .y = 400,
-      .w = 160,
-      .h = 30,
-    },
-    .background_color = WALL_COLOR,
-    .highlight_background_color = {
-      .r = WALL_COLOR.r,
-      .g = WALL_COLOR.g,
-      .b = WALL_COLOR.b,
-      .a = WALL_COLOR.a * 0.5,
-    },
-    .timestamp_last_updated = 0,
-  };
+  Button button = create_button("Jogar", rect(225, 275, 160, 30), WALL_COLOR, color(WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a * 0.5));
   update_and_draw(renderer, button, default_font, default_text_color);
 
   if (button_was_clicked(button))
   {
-    load_next_level_and_start(context);
+    is_menu_active = false;
   }
 
   // Faz o swap do backbuffer com o buffer da tela?
@@ -1129,7 +1111,7 @@ int main(int argc, char **argv)
 
     if (is_menu_active)
     {
-      update_and_draw_menu(renderer, &context);
+      update_and_draw_menu(renderer);
     }
     else
     {
