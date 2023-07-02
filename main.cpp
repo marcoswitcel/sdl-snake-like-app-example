@@ -1016,15 +1016,28 @@ void update_and_draw_menu(SDL_Renderer *renderer, bool *should_quit)
   SDL_RenderClear(renderer);
   constexpr int button_width = 160;
   constexpr int button_height = 30;
-  constexpr int offsetY = button_height + 15;
-  int startY = 260;
+  constexpr int marginY = 15;
+  int startY = HEIGHT / 2;
+  int startX = WIDTH / 2;
 
-  Button button_play = create_button("Jogar", rect(225, startY, button_width, button_height), WALL_COLOR, color(WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a * 0.5));
-  update_and_draw(renderer, button_play, default_font, default_text_color);
-  startY += offsetY;
+  Button buttons[] = {
+    create_button("Jogar", rect(0, 0, button_width, button_height), WALL_COLOR, color(WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a * 0.5)),
+    create_button("Sair", rect(0, 0, button_width, button_height), WALL_COLOR, color(WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a * 0.5)),
+  };
+  Button &button_play = buttons[0];
+  Button &button_quit = buttons[1];
+  
+  constexpr auto total_buttons = (sizeof(buttons) / sizeof(buttons[0]));
+  constexpr auto buttons_total_height = total_buttons * button_height + total_buttons * marginY;
+  for (auto &it : buttons)
+  {
+    it.target_area.x = startX - button_width / 2;
+    it.target_area.y = startY - button_height / 2 - buttons_total_height / 2;
 
-  Button button_quit = create_button("Sair", rect(225, startY, button_width, button_height), WALL_COLOR, color(WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a * 0.5));
-  update_and_draw(renderer, button_quit, default_font, default_text_color);
+    startY += button_height + marginY;
+
+    update_and_draw(renderer, it, default_font, default_text_color);
+  }
 
   if (button_was_clicked(button_play))
   {
