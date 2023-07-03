@@ -31,7 +31,6 @@ static SDL_Color FRUIT_COLOR = { .r = 255, .g =  60, .b =  56, .a = 255 };
 static SDL_Color WALL_COLOR  = { .r =  35, .g =  32, .b =  32, .a = 255 };
 static std::deque<Vec2<unsigned>> CURRENT_DEFAULT_WALLS = std::deque<Vec2<unsigned>>();
 static Vec2<unsigned> SNAKE_START_POSITION = { .x = 3, .y = 5, };
-static bool is_menu_active = true;
 
 // Fontes
 TTF_Font *default_font = NULL;
@@ -72,7 +71,7 @@ typedef struct Context_Data {
     .loose_condition = LOOSE_ON_HIT_BODY | LOOSE_ON_HIT_BORDERS | LOOSE_ON_HIT_WALL,
   };
   bool pointer_activated = false;
-  Game_State state = RUNNING;
+  Game_State state = MENU;
 } Context_Data;
 
 static Context_Data context = { };
@@ -341,7 +340,8 @@ void toggle_pause_play(Context_Data *context)
 
 void reset_arena(Context_Data *context)
 {
-  context->state = RUNNING;
+  // @note Imagino que poderia deixar o estado inalterado se não fosse WINNER ou GAME_OVER
+  if (context->state != MENU) context->state = RUNNING;
 
   // Esse é o estado da cobrinha quando inicia o nível
   context->snake_dir_input = NONE;
@@ -658,7 +658,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
   // Processa inputs
   // @note Por hora como a UI atualiza mais que lógica do jogo estou considerando que o não input `NONE`
   // simboliza que não teve input nesse tick e o valor antigo do input deve ser mantido
-  if (snake_dir != NONE)
+  if (context->state != MENU && snake_dir != NONE)
   {
     context->snake_dir_input = snake_dir;
   }
@@ -1009,7 +1009,7 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
 // @todo João, terminar de construir um menu aqui
 // @work-in-progress
-void update_and_draw_menu(SDL_Renderer *renderer, bool *should_quit)
+void update_and_draw_menu(SDL_Renderer *renderer, Context_Data *context, bool *should_quit)
 {
   // Seta o fundo do renderer
   SDL_SetRenderDrawColor(renderer, BG_COLOR.r, BG_COLOR.g, BG_COLOR.b, BG_COLOR.a);
@@ -1041,7 +1041,7 @@ void update_and_draw_menu(SDL_Renderer *renderer, bool *should_quit)
 
   if (button_was_clicked(button_play))
   {
-    is_menu_active = false;
+    context->state = RUNNING;
   }
 
   if (button_was_clicked(button_quit))
@@ -1135,9 +1135,9 @@ int main(int argc, char **argv)
     // Processa eventos e inputs
     handle_events_and_inputs(&context, &should_quit);
 
-    if (is_menu_active)
+    if (context.state == MENU)
     {
-      update_and_draw_menu(renderer, &should_quit);
+      update_and_draw_menu(renderer, &context, &should_quit);
     }
     else
     {
