@@ -941,6 +941,9 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
     SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+
+    SDL_FreeSurface(text_area_surface);
+    SDL_DestroyTexture(text_area_texture);
   }
 
   if (default_font && context->state == WINNER)
@@ -953,6 +956,9 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
       SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
       SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+
+      SDL_FreeSurface(text_area_surface);
+      SDL_DestroyTexture(text_area_texture);
     }
 
     // apresenta qual o próximo nível
@@ -965,6 +971,9 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
       SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
       SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+
+      SDL_FreeSurface(text_area_surface);
+      SDL_DestroyTexture(text_area_texture);
     }
     // GUI 
     if (context->arena.next_level)
