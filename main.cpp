@@ -924,26 +924,15 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     // @note João, esse processo é ineficiente, porém, por hora serve para testar
     // @todo Organizar um meio de lidar com texto e atualizar apenas quando a string muda, fazer um hash simples?
     // ou criar uma estrutura com flag `needs_update`?
-    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, message_buffer, default_text_color);
-    SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
-    SDL_Rect    target_area = { .x = 4, .y = 0, .w = 140, .h = 30, };
-    SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
-
-    SDL_FreeSurface(text_area_surface);
-    SDL_DestroyTexture(text_area_texture);
+    render_text(renderer, message_buffer, rect(4, 0, 140, 30), default_font, default_text_color);
   }
 
   if (default_font && context->state == GAME_OVER)
   {
     draw_overlay(renderer);
 
-    SDL_Surface *text_area_surface = TTF_RenderText_Solid(default_font, "Fim do jogo", default_text_color);
-    SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
     SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
-    SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
-
-    SDL_FreeSurface(text_area_surface);
-    SDL_DestroyTexture(text_area_texture);
+    render_text(renderer, "Fim do jogo", target_area, default_font, default_text_color);
   }
 
   if (default_font && context->state == WINNER)
@@ -952,13 +941,8 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
     // Mensagem de vitória
     {
-      SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, "Você ganhou", default_text_color);
-      SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
       SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
-      SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
-
-      SDL_FreeSurface(text_area_surface);
-      SDL_DestroyTexture(text_area_texture);
+      render_text(renderer, "Você ganhou", target_area, default_font, default_text_color);
     }
 
     // apresenta qual o próximo nível
@@ -967,13 +951,8 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       char message_buffer[200]; // @note possível overflow aqui?
       sprintf(message_buffer, "Próximo level: %s", context->arena.next_level);
 
-      SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, message_buffer, default_text_color);
-      SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
       SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
-      SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
-
-      SDL_FreeSurface(text_area_surface);
-      SDL_DestroyTexture(text_area_texture);
+      render_text(renderer, message_buffer, target_area, default_font, default_text_color);
     }
     // GUI 
     if (context->arena.next_level)
