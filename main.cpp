@@ -208,6 +208,12 @@ bool try_parse_and_apply_file_name(const char **dest, std::istringstream &iss)
   return true;
 }
 
+void toggleFullscreen(SDL_Window *window)
+{
+  bool is_fullscreen = SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN;
+  SDL_SetWindowFullscreen(window, is_fullscreen ? 0 : SDL_WINDOW_FULLSCREEN);
+}
+
 bool load_level_data(Context_Data &context, const char *file_name)
 {
   std::ifstream file_handle(file_name, std::ios::in);
@@ -587,7 +593,7 @@ void handle_return(Context_Data *context)
   }
 }
 
-void handle_events_and_inputs(Context_Data *context, bool *should_quit)
+void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *should_quit)
 {
   Snake_Dir snake_dir = NONE;
   SDL_Event event;
@@ -621,6 +627,7 @@ void handle_events_and_inputs(Context_Data *context, bool *should_quit)
               case SDL_SCANCODE_S: { snake_dir = DOWN;  } break;
               case SDL_SCANCODE_A: { snake_dir = LEFT;  } break;
               case SDL_SCANCODE_D: { snake_dir = RIGHT; } break;
+              case SDL_SCANCODE_F: { toggleFullscreen(window); } break;
               case SDL_SCANCODE_RETURN: { handle_return(context); } break;
 #ifdef DEV_CODE_ENABLED
               case SDL_SCANCODE_P: { toggle_pause_play(context); } break;
@@ -1121,7 +1128,7 @@ int main(int argc, char **argv)
     trace_timed("Entrando no loop");
 
     // Processa eventos e inputs
-    handle_events_and_inputs(&context, &should_quit);
+    handle_events_and_inputs(window, &context, &should_quit);
 
     if (context.state == MENU)
     {
