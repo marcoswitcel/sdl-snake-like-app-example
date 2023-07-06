@@ -208,6 +208,14 @@ bool try_parse_and_apply_file_name(const char **dest, std::istringstream &iss)
   return true;
 }
 
+void toggle_pointer_activation(Context_Data *context)
+{
+  if (context->state == RUNNING || context->state == PAUSED)
+  {
+    context->pointer_activated = !context->pointer_activated;
+  }
+}
+
 void toggleFullscreen(SDL_Window *window)
 {
   bool is_fullscreen = SDL_GetWindowFlags(window) & SDL_WINDOW_FULLSCREEN;
@@ -634,7 +642,7 @@ void handle_events_and_inputs(SDL_Window *window, Context_Data *context, bool *s
               case SDL_SCANCODE_R: { reset_arena(context); } break;
               case SDL_SCANCODE_E: { export_current_arena_layout(context); } break;
               case SDL_SCANCODE_L: { load_ini_config(); } break; // @todo João, avaliar se não há nenhum efeito negativo
-              case SDL_SCANCODE_T: { context->pointer_activated = !context->pointer_activated; } break;
+              case SDL_SCANCODE_T: { toggle_pointer_activation(context); } break;
 #endif
             }
           }
@@ -909,6 +917,14 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
     SDL_SetRenderDrawColor(renderer, WALL_COLOR.r, WALL_COLOR.g, WALL_COLOR.b, WALL_COLOR.a);
     SDL_RenderFillRect(renderer, &fruit_rect);
+  }
+
+  if (context->state == GAME_OVER || context->state == WINNER)
+  {
+    SDL_ShowCursor(SDL_ENABLE);
+    context->pointer_activated = false;
+  } else {
+    SDL_ShowCursor(context->pointer_activated ? SDL_ENABLE : SDL_DISABLE);
   }
 
   // renderiza um quadrado na posição do mouse

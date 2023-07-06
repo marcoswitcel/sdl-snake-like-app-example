@@ -66,3 +66,4 @@ sudo apt-get install -y libsdl2-ttf-dev
 * [http://devfuria.com.br/linguagem-c/entendendo-o-assert-c/](http://devfuria.com.br/linguagem-c/entendendo-o-assert-c/)
 * [https://wiki.libsdl.org/SDL2/SDL_SetWindowFullscreen](https://wiki.libsdl.org/SDL2/SDL_SetWindowFullscreen)
 * [https://wiki.libsdl.org/SDL2/SDL_GetWindowFlags](https://wiki.libsdl.org/SDL2/SDL_GetWindowFlags)
+* [https://wiki.libsdl.org/SDL2/SDL_ShowCursor](https://wiki.libsdl.org/SDL2/SDL_ShowCursor)
