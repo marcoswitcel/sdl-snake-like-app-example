@@ -114,6 +114,9 @@ void render_text(SDL_Renderer *renderer, const char * text, SDL_Rect target_area
   // Função não utf8 `TTF_RenderText_Solid`
   SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, text, default_text_color);
   SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
+  // @note O tipo SDL_Surface tem o tamanho do texto renderizado caso queira centralizar
+  //target_area.w = text_area_surface->w;
+  //target_area.h = text_area_surface->h;
   SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
 
   // @todo João, lento mas sem leaks...
