@@ -150,10 +150,13 @@ void draw_button(SDL_Renderer *renderer, Button &button, TTF_Font *default_font,
   SDL_SetRenderDrawColor(renderer, background_color.r, background_color.g, background_color.b, background_color.a);
   SDL_RenderFillRect(renderer, &overlay);
 
-  SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, button.text, default_text_color); // @leak
-  SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface); // @leak
+  SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, button.text, default_text_color);
+  SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
   SDL_Rect target_area = { .x = button.target_area.x + margin, .y = button.target_area.y + margin, .w = button.target_area.w - 2 * margin, .h = button.target_area.h - 2 * margin };
   SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
+
+  SDL_FreeSurface(text_area_surface);
+  SDL_DestroyTexture(text_area_texture);
 }
 
 void update_and_draw(SDL_Renderer *renderer, Button &button, TTF_Font *default_font, SDL_Color default_text_color)
