@@ -947,15 +947,15 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
     // @note João, esse processo é ineficiente, porém, por hora serve para testar
     // @todo Organizar um meio de lidar com texto e atualizar apenas quando a string muda, fazer um hash simples?
     // ou criar uma estrutura com flag `needs_update`?
-    render_text(renderer, message_buffer, rect(4, 0, 140, 30), default_font, default_text_color);
+    render_text(renderer, message_buffer, rect(4, 0, 140, 30), default_font, default_text_color, false);
   }
 
   if (default_font && context->state == GAME_OVER)
   {
     draw_overlay(renderer);
 
-    SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
-    render_text(renderer, "Fim do jogo", target_area, default_font, default_text_color);
+    SDL_Rect target_area = { .x = WIDTH / 2, .y = HEIGHT / 2, .w = 160, .h = 30 };
+    render_text(renderer, "Fim do jogo", target_area, default_font, default_text_color, true);
   }
 
   if (default_font && context->state == WINNER)
@@ -964,8 +964,8 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
 
     // Mensagem de vitória
     {
-      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 - 15, .w = 160, .h = 30 };
-      render_text(renderer, "Você ganhou", target_area, default_font, default_text_color);
+      SDL_Rect target_area = { .x = WIDTH / 2, .y = HEIGHT / 2 - 35, .w = 160, .h = 30 };
+      render_text(renderer, "Você ganhou", target_area, default_font, default_text_color, true);
     }
 
     // apresenta qual o próximo nível
@@ -974,8 +974,8 @@ void render_scene(SDL_Renderer *renderer, Context_Data *context)
       char message_buffer[200]; // @note possível overflow aqui?
       sprintf(message_buffer, "Próximo level: %s", context->arena.next_level);
 
-      SDL_Rect target_area = { .x = WIDTH / 2 - 80, .y = HEIGHT / 2 + 15, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
-      render_text(renderer, message_buffer, target_area, default_font, default_text_color);
+      SDL_Rect target_area = { .x = WIDTH / 2, .y = HEIGHT / 2, .w = (int) strlen(context->arena.next_level) * 30, .h = 30 };
+      render_text(renderer, message_buffer, target_area, default_font, default_text_color, true);
     }
     // GUI 
     if (context->arena.next_level)
@@ -1121,7 +1121,7 @@ int main(int argc, char **argv)
   }
 
   // @note Pode ser nulla por enquanto
-  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-Medium.ttf", 28);
+  default_font = TTF_OpenFont("fonts/Roboto_Mono/static/RobotoMono-Medium.ttf", 24);
 
   if (default_font == NULL)
   {

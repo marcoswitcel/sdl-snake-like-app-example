@@ -108,15 +108,21 @@ bool is_updated(Button &button)
   return button.timestamp_last_updated == gui_globals.timestamp_last_updated;
 }
 
-void render_text(SDL_Renderer *renderer, const char * text, SDL_Rect target_area, TTF_Font *default_font, SDL_Color default_text_color)
+void render_text(SDL_Renderer *renderer, const char * text, SDL_Rect target_area, TTF_Font *default_font, SDL_Color default_text_color, bool centrilized)
 {
   // @todo João, renderizando tudo como UTF8, pode ser mais lento checar isso.
   // Função não utf8 `TTF_RenderText_Solid`
   SDL_Surface *text_area_surface = TTF_RenderUTF8_Blended(default_font, text, default_text_color);
   SDL_Texture *text_area_texture = SDL_CreateTextureFromSurface(renderer, text_area_surface);
-  // @note O tipo SDL_Surface tem o tamanho do texto renderizado caso queira centralizar
-  //target_area.w = text_area_surface->w;
-  //target_area.h = text_area_surface->h;
+
+  if (centrilized)
+  {
+    // @note O tipo SDL_Surface tem o tamanho do texto renderizado caso queira centralizar
+    target_area.w = text_area_surface->w;
+    target_area.h = text_area_surface->h;
+    target_area.x -= text_area_surface->w / 2;
+    target_area.y -= text_area_surface->h / 2;
+  }
   SDL_RenderCopy(renderer, text_area_texture, NULL, &target_area);
 
   // @todo João, lento mas sem leaks...
@@ -154,7 +160,7 @@ void draw_button(SDL_Renderer *renderer, Button &button, TTF_Font *default_font,
   SDL_RenderFillRect(renderer, &overlay);
 
   SDL_Rect target_area = { .x = button.target_area.x + margin, .y = button.target_area.y + margin, .w = button.target_area.w - 2 * margin, .h = button.target_area.h - 2 * margin };
-  render_text(renderer, button.text, target_area, default_font, default_text_color);
+  render_text(renderer, button.text, target_area, default_font, default_text_color, false);
 }
 
 void update_and_draw(SDL_Renderer *renderer, Button &button, TTF_Font *default_font, SDL_Color default_text_color)
